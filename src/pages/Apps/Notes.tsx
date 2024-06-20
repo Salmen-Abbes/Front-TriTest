@@ -18,7 +18,7 @@ import IconPencil from '../../components/Icon/IconPencil';
 import IconTrashLines from '../../components/Icon/IconTrashLines';
 import IconEye from '../../components/Icon/IconEye';
 import IconX from '../../components/Icon/IconX';
-
+import axios from 'axios'
 const Notes = () => {
     const dispatch = useDispatch();
     useEffect(() => {
@@ -76,6 +76,30 @@ const Notes = () => {
     const [filterdNotesList, setFilterdNotesList] = useState<any>([]);
     const [selectedTab, setSelectedTab] = useState<any>('all');
     const [deletedNote, setDeletedNote] = useState<any>(null);
+    const [testCases, setTestCases] = useState<any>(null)
+    
+    const fetchTest = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/api/testcase');
+            setTestCases(response.data)
+            console.log(notesList)
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    const fetchScenarios = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/api/scenario');
+            setNoteList(response.data)
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(()=>{
+        fetchScenarios();
+        fetchTest();
+    },[])
 
     const searchNotes = () => {
         if (selectedTab !== 'fav') {
@@ -241,48 +265,24 @@ const Notes = () => {
                         <div className="h-px w-full border-b border-white-light dark:border-[#1b2e4b] my-4"></div>
                         <PerfectScrollbar className="relative ltr:pr-3.5 rtl:pl-3.5 ltr:-mr-3.5 rtl:-ml-3.5 h-full grow">
                             <div className="space-y-1">
-                                <div className="px-1 py-3 text-white-dark">Test Cases</div>
-                                <button
-                                    type="button"
-                                    className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-primary ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${
-                                        selectedTab === 'personal' && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
-                                    }`}
-                                    onClick={() => tabChanged('personal')}
-                                >
-                                    <IconSquareRotated className="fill-primary shrink-0" />
-                                    <div className="ltr:ml-3 rtl:mr-3">Test Case 1</div>
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-warning ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${
-                                        selectedTab === 'work' && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
-                                    }`}
-                                    onClick={() => tabChanged('work')}
-                                >
-                                    <IconSquareRotated className="fill-warning shrink-0" />
-                                    <div className="ltr:ml-3 rtl:mr-3">Test Case 2</div>
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-info ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${
-                                        selectedTab === 'social' && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
-                                    }`}
-                                    onClick={() => tabChanged('social')}
-                                >
-                                    <IconSquareRotated className="fill-info shrink-0" />
-                                    <div className="ltr:ml-3 rtl:mr-3">Test Case 3</div>
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-danger ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${
-                                        selectedTab === 'important' && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
-                                    }`}
-                                    onClick={() => tabChanged('important')}
-                                >
-                                    <IconSquareRotated className="fill-danger shrink-0" />
-                                    <div className="ltr:ml-3 rtl:mr-3">Test Case 4</div>
-                                </button>
+                                {testCases &&
+                                    testCases.map((test: any) => (
+                                        <button
+                                            key={test?.testCaseId}
+                                            type="button"
+                                            className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-success ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${selectedTab === test.testCaseeId && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
+                                                }`}
+                                            onClick={() => {
+                                                tabChanged(test.testCaseId);
+                                                setSelectedTab(test.testCaseId);
+                                            }}
+                                        >
+                                            <IconSquareRotated className="fill-success shrink-0" />
+                                            <div className="ltr:ml-3 rtl:mr-3">{test.testCaseName}</div>
+                                        </button>
+                                    ))}
                             </div>
+
                         </PerfectScrollbar>
                     </div>
                     <div className="ltr:left-0 rtl:right-0 absolute bottom-0 p-4 w-full">
@@ -304,39 +304,16 @@ const Notes = () => {
                                 {filterdNotesList.map((note: any) => {
                                     return (
                                         <div
-                                            className={`panel pb-12 ${
-                                                note.tag === 'personal'
-                                                    ? 'bg-primary-light shadow-primary'
-                                                    : note.tag === 'work'
-                                                    ? 'bg-warning-light shadow-warning'
-                                                    : note.tag === 'social'
-                                                    ? 'bg-info-light shadow-info'
-                                                    : note.tag === 'important'
-                                                    ? 'bg-danger-light shadow-danger'
-                                                    : 'dark:shadow-dark'
-                                            }`}
+                                            className={`panel pb-12 bg-success-light shadow-success`}
                                             key={note.id}
                                         >
                                             <div className="min-h-[142px]">
                                                 <div className="flex justify-between">
                                                     <div className="flex items-center w-max">
-                                                        <div className="flex-none">
-                                                            
-
-                                                            {!note.thumb && note.user && (
-                                                                <div className="grid place-content-center h-8 w-8 rounded-full bg-gray-300 dark:bg-gray-700 text-sm font-semibold">
-                                                                    {note.user.charAt(0) + '' + note.user.charAt(note.user.indexOf('') + 1)}
-                                                                </div>
-                                                            )}
-                                                            {!note.thumb && !note.user && (
-                                                                <div className="bg-gray-300 dark:bg-gray-700 rounded-full p-2">
-                                                                    <IconUser className="w-4.5 h-4.5" />
-                                                                </div>
-                                                            )}
-                                                        </div>
+                                                       
                                                         <div className="ltr:ml-2 rtl:mr-2">
-                                                            <div className="font-semibold">{note.user}</div>
-                                                            <div className="text-sx text-white-dark">{note.date}</div>
+                                                            <div className="font-semibold">{note.commande}</div>
+                                                            <div className="text-sx text-white-dark">{note.path}</div>
                                                         </div>
                                                     </div>
                                                     <div className="dropdown">
@@ -370,76 +347,11 @@ const Notes = () => {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <h4 className="font-semibold mt-4">{note.title}</h4>
-                                                    <p className="text-white-dark mt-2">{note.description}</p>
+                                                    <h4 className="font-semibold mt-4">{note.tagValue}</h4>
+                                                    <p className="text-white-dark mt-2">{note.value}</p>
                                                 </div>
                                             </div>
-                                            <div className="absolute bottom-5 left-0 w-full px-5">
-                                                <div className="flex items-center justify-between mt-2">
-                                                    <div className="dropdown fdfdf">
-                                                        <Dropdown
-                                                            offset={[0, 5]}
-                                                            placement={`${isRtl ? 'bottom-end' : 'bottom-start'}`}
-                                                            btnClassName={`${
-                                                                note.tag === 'personal'
-                                                                    ? 'text-primary'
-                                                                    : note.tag === 'work'
-                                                                    ? 'text-warning'
-                                                                    : note.tag === 'social'
-                                                                    ? 'text-info'
-                                                                    : note.tag === 'important'
-                                                                    ? 'text-danger'
-                                                                    : ''
-                                                            }`}
-                                                            button={
-                                                                <span>
-                                                                    <IconSquareRotated
-                                                                        className={
-                                                                            note.tag === 'personal'
-                                                                                ? 'fill-primary'
-                                                                                : note.tag === 'work'
-                                                                                ? 'fill-warning'
-                                                                                : note.tag === 'social'
-                                                                                ? 'fill-info'
-                                                                                : note.tag === 'important'
-                                                                                ? 'fill-danger'
-                                                                                : ''
-                                                                        }
-                                                                    />
-                                                                </span>
-                                                            }
-                                                        >
-                                                            <ul className="text-sm font-medium">
-                                                                <li>
-                                                                    <button type="button" onClick={() => setTag(note, 'personal')}>
-                                                                        <IconSquareRotated className="ltr:mr-2 rtl:ml-2 fill-primary text-primary" />
-                                                                        Personal
-                                                                    </button>
-                                                                </li>
-                                                                <li>
-                                                                    <button type="button" onClick={() => setTag(note, 'work')}>
-                                                                        <IconSquareRotated className="ltr:mr-2 rtl:ml-2 fill-warning text-warning" />
-                                                                        Work
-                                                                    </button>
-                                                                </li>
-                                                                <li>
-                                                                    <button type="button" onClick={() => setTag(note, 'social')}>
-                                                                        <IconSquareRotated className="ltr:mr-2 rtl:ml-2 fill-info text-info" />
-                                                                        Social
-                                                                    </button>
-                                                                </li>
-                                                                <li>
-                                                                    <button type="button" onClick={() => setTag(note, 'important')}>
-                                                                        <IconSquareRotated className="ltr:mr-2 rtl:ml-2 fill-danger text-danger" />
-                                                                        Important
-                                                                    </button>
-                                                                </li>
-                                                            </ul>
-                                                        </Dropdown>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                     );
                                 })}
@@ -498,7 +410,7 @@ const Notes = () => {
                                                             <option value="Max Smith">Test 1</option>
                                                             <option value="John Doe">Test 2</option>
                                                             <option value="Kia Jain">Test 3</option>
-                                                            
+
                                                         </select>
                                                     </div>
                                                     <div className="mb-5">
@@ -633,12 +545,11 @@ const Notes = () => {
                                                 {params.tag && (
                                                     <button
                                                         type="button"
-                                                        className={`badge badge-outline-primary rounded-3xl capitalize ltr:mr-3 rtl:ml-3 ${
-                                                            (params.tag === 'personal' && 'shadow-primary',
-                                                            params.tag === 'work' && 'shadow-warning',
-                                                            params.tag === 'social' && 'shadow-info',
-                                                            params.tag === 'important' && 'shadow-danger')
-                                                        }`}
+                                                        className={`badge badge-outline-primary rounded-3xl capitalize ltr:mr-3 rtl:ml-3 ${(params.tag === 'personal' && 'shadow-primary',
+                                                                params.tag === 'work' && 'shadow-warning',
+                                                                params.tag === 'social' && 'shadow-info',
+                                                                params.tag === 'important' && 'shadow-danger')
+                                                            }`}
                                                     >
                                                         {params.tag}
                                                     </button>

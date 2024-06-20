@@ -120,7 +120,6 @@ const Todolist = () => {
         fetchTest();
     }, []);
     useEffect(() => {
-
         searchTasks();
         /* eslint-disable react-hooks/exhaustive-deps */
     }, [selectedTab, searchTask, allTasks]);
@@ -137,13 +136,13 @@ const Todolist = () => {
         let res = allTasks;
 
         if (selectedTab !== '') {
-            res = res.filter((d: any) => d.tag === selectedTab);
+            res = res.filter((d: any) => d.testSuiteId == selectedTab);
         }
 
         res = res.filter((d: any) =>
-            d.title?.toLowerCase().includes(searchTask.toLowerCase()) ||
-            d.description?.toLowerCase().includes(searchTask.toLowerCase()) ||
-            d.tag?.toLowerCase().includes(searchTask.toLowerCase())
+            d.testCaseName?.toLowerCase().includes(searchTask.toLowerCase()) ||
+            d.testCaseDescription?.toLowerCase().includes(searchTask.toLowerCase()) ||
+            d.testSuiteName?.toLowerCase().includes(searchTask.toLowerCase())
         );
 
         setFilteredTasks(res);
@@ -300,7 +299,7 @@ const Todolist = () => {
                                             }`}
                                         onClick={() => {
                                             tabChanged();
-                                            setSelectedTab(suite.testSuiteName);
+                                            setSelectedTab(suite.testSuiteId);
                                         }}
                                     >
                                         <IconSquareRotated className="fill-success shrink-0" />
