@@ -20,21 +20,20 @@ import IconCaretDown from '../../components/Icon/IconCaretDown';
 import IconHorizontalDots from '../../components/Icon/IconHorizontalDots';
 import IconPencilPaper from '../../components/Icon/IconPencilPaper';
 import IconX from '../../components/Icon/IconX';
-import IconRestore from '../../components/Icon/IconRestore';
-
+import axios from 'axios'
 const Todolist = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setPageTitle('Test Cases'));
     });
     const defaultParams = {
-        id: null,
-        title: '',
-        description: '',
+        testCaseId: null,
+        testCaseName: '',
+        testCaseDescription: '',
         descriptionText: '',
-        assignee: '',
+        navigator: '',
         path: '',
-        tag: '',
+        url: '',
         priority: 'low',
     };
 
@@ -51,7 +50,7 @@ const Todolist = () => {
     const [pagedTasks, setPagedTasks] = useState<any>(filteredTasks);
     const [searchTask, setSearchTask] = useState<any>('');
     const [selectedTask, setSelectedTask] = useState<any>(defaultParams);
-    const [testSuites, setTestSuites] = useState([]);
+    const [testSuites, setTestSuites] = useState<any>([]);
     const [pager] = useState<any>({
         currentPage: 1,
         totalPages: 0,
@@ -61,39 +60,65 @@ const Todolist = () => {
     });
     const fetchSuites = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/testsuites');
-            if (response.ok) {
-                const data = await response.json()
-                setTestSuites(data);
-            }
-        } catch (err) {
-            console.error(err)
-        }
-
-    }
-    const fetchTest = async () => {
-        try {
-            const response = await fetch('http://localhost:3000/api/testcase');
-            if (response.ok) {
-                const data = await response.json();
-                const dataWithTags = data.map((test: any) => {
-                    const testSuite: any = testSuites.find((suite: any) => suite.id === test.testSuiteId);
-                    return {
-                        ...test,
-                        tag: testSuite ? testSuite.name : ''
-                    };
-                });
-                setAllTasks(dataWithTags);
-            }
+            const response = await axios.get('http://localhost:3000/api/testsuites');
+            setTestSuites(response.data);
+            console.log('da')
         } catch (err) {
             console.error(err);
         }
     };
 
+    const fetchTest = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/api/testcase');
+            const dataWithTags = response.data.map((test: any) => {
+                const testSuite: any = testSuites.find((suite: any) => suite.testSuiteId === test.testSuiteId);
+                return {
+                    ...test,
+                    tag: testSuite ? testSuite.testSuiteName : ''
+                };
+            });
+            setAllTasks(dataWithTags);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const runTest = async (task: any) => {
+        try {
+            const reqBody = { "testCase": task.testCaseId };
+            const response = await axios.post('http://localhost:3000/api/testcase/execute', reqBody, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.status === 200) {
+                showMessage(`${task.testCaseName} runned Successfully`);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const deleteTask = async (task: any) => {
+        try {
+            const response = await axios.delete(`http://localhost:3000/api/testcase/${task.testCaseId}`);
+            if (response.status === 200) {
+                setAllTasks(allTasks.filter((d: any) => d.testCaseId !== task.testCaseId));
+                searchTasks(false);
+            } else if (response.status === 404) {
+                console.log(`Test case with id ${task.testCaseId} not found`);
+            } else {
+                console.error(`Error deleting test case with id ${task.testCaseId}: ${response.statusText}`);
+            }
+        } catch (error: any) {
+            console.error(`Error deleting test case with id ${task.testCaseId}: ${error.message}`);
+        }
+    };
     useEffect(() => {
         fetchSuites();
         fetchTest();
-    }, [testSuites])
+    }, []);
     useEffect(() => {
 
         searchTasks();
@@ -143,36 +168,19 @@ const Todolist = () => {
         });
     };
 
-    const runTest = async (task: any) => {
-        try {
-            const reqBody = JSON.stringify({ "testCase": task.id })
-            const response = await fetch('http://localhost:3000/api/testcase/execute', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: reqBody,
-            })
-            if (response.ok) {
-                showMessage(`${task.name} runned Successfuly`);
-            }
-        } catch (err: any) {
-            console.log(err)
-        }
 
-    }
     const tabChanged = () => {
         setIsShowTaskMenu(false);
     };
 
     const taskComplete = (task: any = null) => {
-        let item = filteredTasks.find((d: any) => d.id === task.id);
+        let item = filteredTasks.find((d: any) => d.id === task.testCaseId);
         item.status = item.status === 'complete' ? '' : 'complete';
         searchTasks(false);
     };
 
     const setImportant = (task: any = null) => {
-        let item = filteredTasks.find((d: any) => d.id === task.id);
+        let item = filteredTasks.find((d: any) => d.id === task.testCaseId);
         item.status = item.status === 'important' ? '' : 'important';
         searchTasks(false);
     };
@@ -195,50 +203,48 @@ const Todolist = () => {
         setAddTaskModal(true);
     };
 
-    const deleteTask = (task: any, type: string = '') => {
-        if (type === 'delete') {
-            task.status = 'trash';
-        }
-        if (type === 'deletePermanent') {
-            setAllTasks(allTasks.filter((d: any) => d.id !== task.id));
-        } else if (type === 'restore') {
-            task.status = '';
-        }
-        searchTasks(false);
-    };
 
-    const saveTask = () => {
-        if (!params.title) {
+    const saveTask = async() => {
+        if (!params.testCaseName) {
             showMessage('Title is required.', 'error');
             return false;
         }
-        if (params.id) {
+        if (params.testCaseId) {
             //update task
-            setAllTasks(
-                //@ts-ignore
-                allTasks.map((d: any) => {
-                    if (d.id === params.id) {
-                        d = params;
-                    }
-                    return d;
-                })
-            );
+            try{
+                const response = await axios.put(`http://localhost:3000/api/testcase/${params.testCaseId}`,params)
+            if(response.status===200){
+                setAllTasks(
+                    //@ts-ignore
+                    allTasks.map((d: any) => {
+                        if (d.testCaseId === params.testCaseId) {
+                            d = params;
+                        }
+                        return d;
+                    })
+                );
+            } 
+            }catch(err:any){
+                console.error(err)
+            }
+              
+            
         } else {
             //add task
             //@ts-ignore
-
             const maxId = allTasks?.length ? allTasks.reduce((max: any, obj: any) => (obj.id > max ? obj.id : max), allTasks[0].id) : 0;
-            const today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth());
-            const yyyy = today.getFullYear();
-            const monthNames: any = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             let task = params;
-            task.id = maxId + 1;
-            task.date = monthNames[mm] + ', ' + dd + ' ' + yyyy;
-            //@ts-ignore
-
-            allTasks.unshift(task);
+            task.testCaseId = maxId + 1;
+            
+            try{
+                const response = await axios.post('http://localhost:3000/api/testcase',task)
+                if(response.status===200){
+                    //@ts-ignore
+                    allTasks.unshift(task);
+            } 
+            }catch(err:any){
+                console.error(err)
+            }
             searchTasks();
         }
         showMessage('Test has been saved successfully.');
@@ -284,17 +290,17 @@ const Todolist = () => {
                                 <div className="text-white-dark px-1 py-3">Test Suites</div>
                                 {testSuites && testSuites.map((suite: any) => (
                                     <button
-                                        key={suite?.id}
+                                        key={suite?.testSuiteId}
                                         type="button"
-                                        className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-success ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${selectedTab === suite.name && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
+                                        className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-success ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${selectedTab === suite.testSuiteName && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
                                             }`}
                                         onClick={() => {
                                             tabChanged();
-                                            setSelectedTab(suite.name);
+                                            setSelectedTab(suite.testSuiteName);
                                         }}
                                     >
                                         <IconSquareRotated className="fill-success shrink-0" />
-                                        <div className="ltr:ml-3 rtl:mr-3">{suite.name}</div>
+                                        <div className="ltr:ml-3 rtl:mr-3">{suite.testSuiteName}</div>
                                     </button>
                                 ))}
                             </div>
@@ -363,24 +369,24 @@ const Todolist = () => {
                                     <tbody>
                                         {pagedTasks.map((task: any) => {
                                             return (
-                                                <tr className={`group cursor-pointer ${task.status === 'Passed' ? 'bg-white-light/30 dark:bg-[#1a2941]' : ''}`} key={task.id}>
+                                                <tr className={`group cursor-pointer `} key={task.testCaseId}>
                                                     <td className="w-1">
                                                         <input
                                                             type="checkbox"
-                                                            id={`chk-${task.id}`}
+                                                            id={`chk-${task.testCaseId}`}
                                                             className="form-checkbox"
                                                             disabled={selectedTab === 'trash'}
                                                             onClick={() => taskComplete(task)}
-                                                            defaultChecked={task.status === 'Passed'}
+
                                                         />
                                                     </td>
                                                     <td>
                                                         <div onClick={() => viewTask(task)}>
-                                                            <div className={`group-hover:text-primary font-semibold text-base whitespace-nowrap ${task.status === 'Passed' ? 'line-through' : ''}`}>
-                                                                {task.name}
+                                                            <div className={`group-hover:text-primary font-semibold text-base whitespace-nowrap `}>
+                                                                {task.testCaseName}
                                                             </div>
-                                                            <div className={`text-white-dark overflow-hidden min-w-[300px] line-clamp-1 ${task.status === 'Passed' ? 'line-through' : ''}`}>
-                                                                {task.description}
+                                                            <div className={`text-white-dark overflow-hidden min-w-[300px] line-clamp-1`}>
+                                                                {task.testCaseDescription}
                                                             </div>
                                                         </div>
                                                     </td>
@@ -389,12 +395,12 @@ const Todolist = () => {
                                                             <span
                                                                 className={`badge rounded-full capitalize hover:top-0 hover:text-white badge-outline-success hover:bg-success`}
                                                             >
-                                                                {task.tag ? task.tag : 'Test suite'}
+                                                                {testSuites.find((suite: any) => suite.testSuiteId === task.testSuiteId).testSuiteName}
                                                             </span>
                                                         </div>
                                                     </td>
                                                     <td className="w-1">
-                                                        <p className={`whitespace-nowrap text-white-dark font-medium ${task.status === 'complete' ? 'line-through' : ''}`}>{task.date}</p>
+                                                        <p className={`whitespace-nowrap text-white-dark font-medium `}>{task.date}</p>
                                                     </td>
                                                     <td className="w-1">
                                                         <div className="flex items-center justify-between w-max ltr:ml-auto rtl:mr-auto">
@@ -416,7 +422,7 @@ const Todolist = () => {
                                                                                     </button>
                                                                                 </li>
                                                                                 <li>
-                                                                                    <button type="button" onClick={() => deleteTask(task, 'delete')}>
+                                                                                    <button type="button" onClick={() => deleteTask(task)}>
                                                                                         <IconTrashLines className="ltr:mr-2 rtl:ml-2 shrink-0" />
                                                                                         Delete
                                                                                     </button>
@@ -435,22 +441,7 @@ const Todolist = () => {
                                                                                 </li>
                                                                             </>
                                                                         )}
-                                                                        {selectedTab === 'trash' && (
-                                                                            <>
-                                                                                <li>
-                                                                                    <button type="button" onClick={() => deleteTask(task, 'deletePermanent')}>
-                                                                                        <IconTrashLines className="ltr:mr-2 rtl:ml-2 shrink-0" />
-                                                                                        Permanent Delete
-                                                                                    </button>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <button type="button" onClick={() => deleteTask(task, 'restore')}>
-                                                                                        <IconRestore className="ltr:mr-2 rtl:ml-2 shrink-0" />
-                                                                                        Restore Task
-                                                                                    </button>
-                                                                                </li>
-                                                                            </>
-                                                                        )}
+
                                                                     </ul>
                                                                 </Dropdown>
                                                             </div>
@@ -502,66 +493,61 @@ const Todolist = () => {
                                             <IconX />
                                         </button>
                                         <div className="text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
-                                            {params.id ? 'Edit Test Case' : 'Add Test Case'}
+                                            {params.testCaseId ? 'Edit Test Case' : 'Add Test Case'}
                                         </div>
                                         <div className="p-5">
                                             <form>
                                                 <div className="mb-5">
-                                                    <label htmlFor="title">Title</label>
-                                                    <input id="title" type="text" placeholder="Enter Test Title" className="form-input" value={params.title} onChange={(e) => changeValue(e)} />
+                                                    <label htmlFor="testCaseName">Title</label>
+                                                    <input id="testCaseName" type="text" placeholder="Enter Test Title" className="form-input" value={params.testCaseName} onChange={(e) => changeValue(e)} />
                                                 </div>
                                                 <div className="mb-5">
-                                                    <label htmlFor="assignee">Browser</label>
-                                                    <select id="assignee" className="form-select" value={params.assignee} onChange={(e) => changeValue(e)}>
+                                                    <label htmlFor="navigator">Browser</label>
+                                                    <select id="navigator" className="form-select" value={params.navigator} onChange={(e) => changeValue(e)}>
                                                         <option value="">Select Browser</option>
-                                                        <option value="John Smith">Chrome</option>
-                                                        <option value="Kia Vega">Edge</option>
-                                                        <option value="Sandy Doe">Firefox</option>
-                                                        <option value="Jane Foster">Brave</option>
-                                                        <option value="Donna Frank">Tor</option>
+                                                        <option value="Chrome">Chrome</option>
+                                                        <option value="Edge">Edge</option>
+                                                        <option value="Firefox">Firefox</option>
+                                                        <option value="Brave">Brave</option>
+                                                        <option value="Tor">Tor</option>
                                                     </select>
                                                 </div>
                                                 <div className="mb-5 flex justify-between gap-4">
                                                     <div className="flex-1">
-                                                        <label htmlFor="tag">Tag</label>
-                                                        <select id="tag" className="form-select" value={params.tag} onChange={(e) => changeValue(e)}>
-                                                            <option value="">Select Tag</option>
-                                                            <option value="team">Team</option>
-                                                            <option value="update">Update</option>
+                                                        <label htmlFor="testsuite">Test Suite</label>
+                                                        <select id="testsuire" className="form-select" value={params.testSuiteId} onChange={(e) => changeValue(e)}>
+                                                            <option value='' selected>Select Test Suite</option>
+                                                            {testSuites.map((suite: any) => (
+                                                                <option key={suite.testSuiteId} value={suite.testSuiteId}>{suite.testSuiteName}</option>
+                                                            ))}
                                                         </select>
                                                     </div>
                                                     <div className="flex-1">
-                                                        <label htmlFor="priority">Priority</label>
-                                                        <select id="priority" className="form-select" value={params.priority} onChange={(e) => changeValue(e)}>
-                                                            <option value="">Select Priority</option>
-                                                            <option value="low">Low</option>
-                                                            <option value="medium">Medium</option>
-                                                            <option value="high">High</option>
-                                                        </select>
+                                                        <label htmlFor="url">URL</label>
+                                                        <input id="url" type="text" placeholder="Enter Test URL" className="form-input" value={params.url} onChange={(e) => changeValue(e)} />
                                                     </div>
                                                 </div>
                                                 <div className="mb-5">
                                                     <label>Description</label>
-                                                    <ReactQuill
-                                                        theme="snow"
-                                                        value={params.description}
-                                                        defaultValue={params.description}
-                                                        onChange={(content, delta, source, editor) => {
-                                                            params.description = content;
-                                                            params.descriptionText = editor.getText();
+                                                    <textarea
+                                                        value={params.testCaseDescription}
+                                                        onChange={(e) => {
                                                             setParams({
                                                                 ...params,
+                                                                testCaseDescription: e.target.value,
+                                                                descriptionText: e.target.value
                                                             });
                                                         }}
-                                                        style={{ minHeight: '200px' }}
+                                                        style={{ minHeight: '200px', width: '100%', backgroundColor: 'transparent', border: '1px solid #e5e5e5', padding: '10px' }}
                                                     />
+
                                                 </div>
                                                 <div className="ltr:text-right rtl:text-left flex justify-end items-center mt-8">
                                                     <button type="button" className="btn btn-outline-danger" onClick={() => setAddTaskModal(false)}>
                                                         Cancel
                                                     </button>
                                                     <button type="button" className="btn btn-primary ltr:ml-4 rtl:mr-4" onClick={() => saveTask()}>
-                                                        {params.id ? 'Update' : 'Add'}
+                                                        {params.testCaseId ? 'Update' : 'Add'}
                                                     </button>
                                                 </div>
                                             </form>
@@ -607,7 +593,7 @@ const Todolist = () => {
                                             <IconX />
                                         </button>
                                         <div className="flex items-center flex-wrap gap-2 text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
-                                            <div>{selectedTask.title}</div>
+                                            <div>{selectedTask.testCaseName}</div>
                                             {selectedTask.priority && (
                                                 <div
                                                     className={`badge rounded-3xl capitalize ${selectedTask.priority === 'medium'
@@ -632,7 +618,7 @@ const Todolist = () => {
                                             )}
                                         </div>
                                         <div className="p-5">
-                                            <div className="text-base prose" dangerouslySetInnerHTML={{ __html: selectedTask.description }}></div>
+                                            <div className="text-base prose" dangerouslySetInnerHTML={{ __html: selectedTask.testCaseDescription }}></div>
                                             <div className="flex justify-end items-center mt-8">
                                                 <button type="button" className="btn btn-outline-danger" onClick={() => setViewTaskModal(false)}>
                                                     Close
