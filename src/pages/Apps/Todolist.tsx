@@ -71,14 +71,7 @@ const Todolist = () => {
     const fetchTest = async () => {
         try {
             const response = await axios.get('http://localhost:3000/api/testcase');
-            const dataWithTags = response.data.map((test: any) => {
-                const testSuite: any = testSuites.find((suite: any) => suite.testSuiteId === test.testSuiteId);
-                return {
-                    ...test,
-                    tag: testSuite ? testSuite.testSuiteName : ''
-                };
-            });
-            setAllTasks(dataWithTags);
+            setAllTasks(response.data);
         } catch (err) {
             console.error(err);
         }
