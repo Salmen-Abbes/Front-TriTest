@@ -237,7 +237,11 @@ const Todolist = () => {
             task.testCaseId = maxId + 1;
             
             try{
-                const response = await axios.post('http://localhost:3000/api/testcase',task)
+                let test ={
+                    testSuiteId:parseInt(task.testSuiteId),
+                    ...task
+                }
+                const response = await axios.post('http://localhost:3000/api/testcase',test)
                 if(response.status===200){
                     //@ts-ignore
                     allTasks.unshift(task);
@@ -395,7 +399,7 @@ const Todolist = () => {
                                                             <span
                                                                 className={`badge rounded-full capitalize hover:top-0 hover:text-white badge-outline-success hover:bg-success`}
                                                             >
-                                                                {testSuites.find((suite: any) => suite.testSuiteId === task.testSuiteId).testSuiteName}
+                                                                {testSuites?.find((suite: any) => suite.testSuiteId == task.testSuiteId).testSuiteName}
                                                             </span>
                                                         </div>
                                                     </td>
@@ -515,7 +519,7 @@ const Todolist = () => {
                                                 <div className="mb-5 flex justify-between gap-4">
                                                     <div className="flex-1">
                                                         <label htmlFor="testsuite">Test Suite</label>
-                                                        <select id="testsuire" className="form-select" value={params.testSuiteId} onChange={(e) => changeValue(e)}>
+                                                        <select id="testSuiteId" className="form-select" value={params.testSuiteId} onChange={(e) => changeValue(e)}>
                                                             <option value='' selected>Select Test Suite</option>
                                                             {testSuites.map((suite: any) => (
                                                                 <option key={suite.testSuiteId} value={suite.testSuiteId}>{suite.testSuiteName}</option>
