@@ -45,393 +45,13 @@ const Todolist = () => {
     const [params, setParams] = useState<any>(JSON.parse(JSON.stringify(defaultParams)));
 
     const [allTasks, setAllTasks] = useState([
-        {
-            id: 1,
-            title: 'Meeting with Shaun Park at 4:50pm',
-            date: 'Aug, 07 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: 'team',
-            priority: 'medium',
-            assignee: 'John Smith',
-            path: '',
-            status: '',
-        },
-        {
-            id: 2,
-            title: 'Team meet at Starbucks',
-            date: 'Aug, 06 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: 'team',
-            priority: 'low',
-            assignee: 'John Smith',
-            path: 'profile-15.jpeg',
-            status: '',
-        },
-        {
-            id: 3,
-            title: 'Meet Lisa to discuss project details',
-            date: 'Aug, 05 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: 'update',
-            priority: 'medium',
-            assignee: 'John Smith',
-            path: 'profile-1.jpeg',
-            status: '',
-        },
-        {
-            id: 4,
-            title: 'Download Complete',
-            date: 'Aug, 04 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: 'low',
-            assignee: 'John Smith',
-            path: 'profile-16.jpeg',
-            status: '',
-        },
-        {
-            id: 5,
-            title: 'Conference call with Marketing Manager',
-            date: 'Aug, 03 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: 'update',
-            priority: 'high',
-            assignee: 'John Smith',
-            path: 'profile-5.jpeg',
-            status: 'important',
-        },
-        {
-            id: 6,
-            title: 'New User Registered',
-            date: 'Aug, 02 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: 'medium',
-            assignee: '',
-            path: '',
-            status: 'important',
-        },
-        {
-            id: 7,
-            title: 'Fix issues in new project',
-            date: 'Aug, 01 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: 'team',
-            priority: 'medium',
-            assignee: 'John Smith',
-            path: 'profile-17.jpeg',
-            status: '',
-        },
-        {
-            id: 8,
-            title: 'Check All functionality',
-            date: 'Aug, 07 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: 'update',
-            priority: 'medium',
-            assignee: 'John Smith',
-            path: 'profile-18.jpeg',
-            status: 'important',
-        },
-        {
-            id: 9,
-            title: 'Check Repository',
-            date: 'Aug, 07 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: 'team',
-            priority: 'medium',
-            assignee: 'John Smith',
-            path: 'profile-20.jpeg',
-            status: 'complete',
-        },
-        {
-            id: 10,
-            title: 'Trashed Tasks',
-            date: 'Aug, 08 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: 'team',
-            priority: 'medium',
-            assignee: 'John Smith',
-            path: 'profile-15.jpeg',
-            status: 'trash',
-        },
-        {
-            id: 11,
-            title: 'Trashed Tasks 2',
-            date: 'Aug, 09 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: 'medium',
-            assignee: 'John Smith',
-            path: 'profile-2.jpeg',
-            status: 'trash',
-        },
-        {
-            id: 12,
-            title: 'Trashed Tasks 3',
-            date: 'Aug, 10 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: 'team',
-            priority: 'medium',
-            assignee: 'John Smith',
-            path: 'profile-24.jpeg',
-            status: 'trash',
-        },
-        {
-            id: 13,
-            title: 'Do something nice for someone I care about',
-            date: 'Sep, 10 2022',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-25.jpeg',
-            status: '',
-        },
-        {
-            id: 14,
-            title: 'Memorize the fifty states and their capitals',
-            date: 'Sep, 13 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-11.jpeg',
-            status: '',
-        },
-        {
-            id: 15,
-            title: 'Watch a classic movie',
-            date: 'Oct, 10 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-10.jpeg',
-            status: '',
-        },
-        {
-            id: 16,
-            title: 'Contribute code or a monetary donation to an open-source software project',
-            date: 'Nov, 10 2017',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-12.jpeg',
-            status: '',
-        },
-        {
-            id: 17,
-            title: 'Solve a Rubik`s cube',
-            date: 'Nov, 15 2017',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-25.jpeg',
-            status: '',
-        },
-        {
-            id: 18,
-            title: 'Bake pastries for me and neighbor',
-            date: 'Mar, 19 2018',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-27.jpeg',
-            status: '',
-        },
-        {
-            id: 19,
-            title: 'Go see a Broadway production',
-            date: 'Oct, 2 2018',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-26.jpeg',
-            status: '',
-        },
-        {
-            id: 20,
-            title: 'Write a thank you letter to an influential person in my life',
-            date: 'Nov, 20 2018',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-18.jpeg',
-            status: '',
-        },
-        {
-            id: 21,
-            title: 'Invite some friends over for a game night',
-            date: 'Jun 6 2019',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-13.jpeg',
-            status: '',
-        },
-        {
-            id: 22,
-            title: 'Have a football scrimmage with some friends',
-            date: 'Sep, 13 2019',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-24.jpeg',
-            status: '',
-        },
-        {
-            id: 23,
-            title: 'Text a friend I haven`t talked to in a long time',
-            date: 'Oct, 10 2019',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-20.jpeg',
-            status: '',
-        },
-        {
-            id: 24,
-            title: 'Organize pantry',
-            date: 'Feb, 24 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-10.jpeg',
-            status: '',
-        },
-        {
-            id: 25,
-            title: 'Buy a new house decoration',
-            date: 'Mar, 25 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-9.jpeg',
-            status: '',
-        },
-        {
-            id: 26,
-            title: 'Plan a vacation I`ve always wanted to take',
-            date: 'Mar, 30 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-4.jpeg',
-            status: '',
-        },
-        {
-            id: 27,
-            title: 'Clean out car',
-            date: 'Apr, 3 2020',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            descriptionText:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.',
-            tag: '',
-            priority: '',
-            assignee: 'John Smith',
-            path: 'profile-3.jpeg',
-            status: '',
-        },
     ]);
 
     const [filteredTasks, setFilteredTasks] = useState<any>(allTasks);
     const [pagedTasks, setPagedTasks] = useState<any>(filteredTasks);
     const [searchTask, setSearchTask] = useState<any>('');
     const [selectedTask, setSelectedTask] = useState<any>(defaultParams);
-    const [isPriorityMenu] = useState<any>(null);
-    const [isTagMenu] = useState<any>(null);
-
+    const [testSuites, setTestSuites] = useState([]);
     const [pager] = useState<any>({
         currentPage: 1,
         totalPages: 0,
@@ -439,8 +59,43 @@ const Todolist = () => {
         startIndex: 0,
         endIndex: 0,
     });
+    const fetchSuites = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/api/testsuites');
+            if (response.ok) {
+                const data = await response.json()
+                setTestSuites(data);
+            }
+        } catch (err) {
+            console.error(err)
+        }
+
+    }
+    const fetchTest = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/api/testcases');
+            if (response.ok) {
+                const data = await response.json();
+                const dataWithTags = data.map((test: any) => {
+                    const testSuite = testSuites.find((suite) => suite.id === test.testSuiteId);
+                    return {
+                        ...test,
+                        tag: testSuite ? testSuite.name : ''
+                    };
+                });
+                setAllTasks(dataWithTags);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     useEffect(() => {
+        fetchSuites();
+        fetchTest();
+    }, [testSuites])
+    useEffect(() => {
+
         searchTasks();
         /* eslint-disable react-hooks/exhaustive-deps */
     }, [selectedTab, searchTask, allTasks]);
@@ -454,20 +109,20 @@ const Todolist = () => {
         if (isResetPage) {
             pager.currentPage = 1;
         }
-        let res;
-        if (selectedTab === 'complete' || selectedTab === 'important' || selectedTab === 'trash') {
-            res = allTasks.filter((d) => d.status === selectedTab);
-        } else {
-            res = allTasks.filter((d) => d.status !== 'trash');
-        }
-
-        if (selectedTab === 'team' || selectedTab === 'update') {
+        let res = allTasks;
+    
+        if (selectedTab !== '') {
             res = res.filter((d) => d.tag === selectedTab);
-        } else if (selectedTab === 'high' || selectedTab === 'medium' || selectedTab === 'low') {
-            res = res.filter((d) => d.priority === selectedTab);
         }
-        setFilteredTasks([...res.filter((d: any) => d.title?.toLowerCase().includes(searchTask))]);
-        getPager(res.filter((d: any) => d.title?.toLowerCase().includes(searchTask)));
+    
+        res = res.filter((d) =>
+            d.title?.toLowerCase().includes(searchTask.toLowerCase()) ||
+            d.description?.toLowerCase().includes(searchTask.toLowerCase()) ||
+            d.tag?.toLowerCase().includes(searchTask.toLowerCase())
+        );
+    
+        setFilteredTasks(res);
+        getPager(res);
     };
 
     const getPager = (res: any) => {
@@ -488,18 +143,9 @@ const Todolist = () => {
         });
     };
 
-    const setPriority = (task: any, name: string = '') => {
-        let item = filteredTasks.find((d: any) => d.id === task.id);
-        item.priority = name;
-        searchTasks(false);
-    };
-
-    const setTag = (task: any, name: string = '') => {
-        let item = filteredTasks.find((d: any) => d.id === task.id);
-        item.tag = name;
-        searchTasks(false);
-    };
-
+    const runTest= async(task:any) =>{
+        
+    }
     const tabChanged = () => {
         setIsShowTaskMenu(false);
     };
@@ -600,9 +246,8 @@ const Todolist = () => {
         <div>
             <div className="flex gap-5 relative sm:h-[calc(100vh_-_150px)] h-full">
                 <div
-                    className={`panel p-4 flex-none w-[240px] max-w-full absolute xl:relative z-10 space-y-4 xl:h-auto h-full xl:block ltr:xl:rounded-r-md ltr:rounded-r-none rtl:xl:rounded-l-md rtl:rounded-l-none hidden ${
-                        isShowTaskMenu && '!block'
-                    }`}
+                    className={`panel p-4 flex-none w-[240px] max-w-full absolute xl:relative z-10 space-y-4 xl:h-auto h-full xl:block ltr:xl:rounded-r-md ltr:rounded-r-none rtl:xl:rounded-l-md rtl:rounded-l-none hidden ${isShowTaskMenu && '!block'
+                        }`}
                 >
                     <div className="flex flex-col h-full pb-16">
                         <div className="pb-5">
@@ -615,75 +260,23 @@ const Todolist = () => {
                         </div>
                         <PerfectScrollbar className="relative ltr:pr-3.5 rtl:pl-3.5 ltr:-mr-3.5 rtl:-ml-3.5 h-full grow">
                             <div className="space-y-1">
-                                
                                 <div className="h-px w-full border-b border-white-light dark:border-[#1b2e4b]"></div>
                                 <div className="text-white-dark px-1 py-3">Test Suites</div>
-                                <button
-                                    type="button"
-                                    className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-success ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${
-                                        selectedTab === 'team' && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
-                                    }`}
-                                    onClick={() => {
-                                        tabChanged();
-                                        setSelectedTab('team');
-                                    }}
-                                >
-                                    <IconSquareRotated className="fill-success shrink-0" />
-                                    <div className="ltr:ml-3 rtl:mr-3">Suite 1</div>
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-warning ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${
-                                        selectedTab === 'low' && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
-                                    }`}
-                                    onClick={() => {
-                                        tabChanged();
-                                        setSelectedTab('low');
-                                    }}
-                                >
-                                    <IconSquareRotated className="fill-warning shrink-0" />
-                                    <div className="ltr:ml-3 rtl:mr-3">Suite 2</div>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-primary ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${
-                                        selectedTab === 'medium' && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
-                                    }`}
-                                    onClick={() => {
-                                        tabChanged();
-                                        setSelectedTab('medium');
-                                    }}
-                                >
-                                    <IconSquareRotated className="fill-primary shrink-0" />
-                                    <div className="ltr:ml-3 rtl:mr-3">Suite 3</div>
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-danger ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${
-                                        selectedTab === 'high' && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
-                                    }`}
-                                    onClick={() => {
-                                        tabChanged();
-                                        setSelectedTab('high');
-                                    }}
-                                >
-                                    <IconSquareRotated className="fill-danger shrink-0" />
-                                    <div className="ltr:ml-3 rtl:mr-3">Suite 4</div>
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-info ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${
-                                        selectedTab === 'update' && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
-                                    }`}
-                                    onClick={() => {
-                                        tabChanged();
-                                        setSelectedTab('update');
-                                    }}
-                                >
-                                    <IconSquareRotated className="fill-info shrink-0" />
-                                    <div className="ltr:ml-3 rtl:mr-3">Suite 5</div>
-                                </button>
+                                {testSuites && testSuites.map((suite, index) => (
+                                    <button
+                                        key={suite?.id}
+                                        type="button"
+                                        className={`w-full flex items-center h-10 p-1 hover:bg-white-dark/10 rounded-md dark:hover:bg-[#181F32] font-medium text-success ltr:hover:pl-3 rtl:hover:pr-3 duration-300 ${selectedTab === suite.name && 'ltr:pl-3 rtl:pr-3 bg-gray-100 dark:bg-[#181F32]'
+                                            }`}
+                                        onClick={() => {
+                                            tabChanged();
+                                            setSelectedTab(suite.name);
+                                        }}
+                                    >
+                                        <IconSquareRotated className="fill-success shrink-0" />
+                                        <div className="ltr:ml-3 rtl:mr-3">{suite.name}</div>
+                                    </button>
+                                ))}
                             </div>
                         </PerfectScrollbar>
                         <div className="ltr:left-0 rtl:right-0 absolute bottom-0 p-4 w-full">
@@ -748,9 +341,9 @@ const Todolist = () => {
                             <div className="table-responsive grow overflow-y-auto sm:min-h-[300px] min-h-[400px]">
                                 <table className="table-hover">
                                     <tbody>
-                                        {pagedTasks.map((task: any) => {
+                                        {pagedTasks.map((task:any) => {
                                             return (
-                                                <tr className={`group cursor-pointer ${task.status === 'complete' ? 'bg-white-light/30 dark:bg-[#1a2941]' : ''}`} key={task.id}>
+                                                <tr className={`group cursor-pointer ${task.status === 'Passed' ? 'bg-white-light/30 dark:bg-[#1a2941]' : ''}`} key={task.id}>
                                                     <td className="w-1">
                                                         <input
                                                             type="checkbox"
@@ -758,126 +351,26 @@ const Todolist = () => {
                                                             className="form-checkbox"
                                                             disabled={selectedTab === 'trash'}
                                                             onClick={() => taskComplete(task)}
-                                                            defaultChecked={task.status === 'complete'}
+                                                            defaultChecked={task.status === 'Passed'}
                                                         />
                                                     </td>
                                                     <td>
                                                         <div onClick={() => viewTask(task)}>
-                                                            <div className={`group-hover:text-primary font-semibold text-base whitespace-nowrap ${task.status === 'complete' ? 'line-through' : ''}`}>
-                                                                {task.title}
+                                                            <div className={`group-hover:text-primary font-semibold text-base whitespace-nowrap ${task.status === 'Passed' ? 'line-through' : ''}`}>
+                                                                {task.name}
                                                             </div>
-                                                            <div className={`text-white-dark overflow-hidden min-w-[300px] line-clamp-1 ${task.status === 'complete' ? 'line-through' : ''}`}>
-                                                                {task.descriptionText}
+                                                            <div className={`text-white-dark overflow-hidden min-w-[300px] line-clamp-1 ${task.status === 'Passed' ? 'line-through' : ''}`}>
+                                                                {task.description}
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td className="w-1">
                                                         <div className="flex items-center ltr:justify-end rtl:justify-start space-x-2 rtl:space-x-reverse">
-                                                            {task.priority && (
-                                                                <div className="dropdown">
-                                                                    <Dropdown
-                                                                        offset={[0, 5]}
-                                                                        placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                                                        btnClassName="align-middle"
-                                                                        button={
-                                                                            <span
-                                                                                className={`badge rounded-full capitalize hover:top-0 hover:text-white ${
-                                                                                    task.priority === 'medium'
-                                                                                        ? 'badge-outline-primary hover:bg-primary'
-                                                                                        : task.priority === 'low'
-                                                                                        ? 'badge-outline-warning hover:bg-warning'
-                                                                                        : task.priority === 'high'
-                                                                                        ? 'badge-outline-danger hover:bg-danger'
-                                                                                        : task.priority === 'medium' && isPriorityMenu === task.id
-                                                                                        ? 'text-white bg-primary'
-                                                                                        : task.priority === 'low' && isPriorityMenu === task.id
-                                                                                        ? 'text-white bg-warning'
-                                                                                        : task.priority === 'high' && isPriorityMenu === task.id
-                                                                                        ? 'text-white bg-danger'
-                                                                                        : ''
-                                                                                }`}
-                                                                            >
-                                                                                {task.priority}
-                                                                            </span>
-                                                                        }
-                                                                    >
-                                                                        <ul className="text-sm text-medium">
-                                                                            <li>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className="w-full text-danger ltr:text-left rtl:text-right"
-                                                                                    onClick={() => setPriority(task, 'high')}
-                                                                                >
-                                                                                    High
-                                                                                </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className="w-full text-primary ltr:text-left rtl:text-right"
-                                                                                    onClick={() => setPriority(task, 'medium')}
-                                                                                >
-                                                                                    Medium
-                                                                                </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className="w-full text-warning ltr:text-left rtl:text-right"
-                                                                                    onClick={() => setPriority(task, 'low')}
-                                                                                >
-                                                                                    Low
-                                                                                </button>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </Dropdown>
-                                                                </div>
-                                                            )}
-
-                                                            {task.tag && (
-                                                                <div className="dropdown">
-                                                                    <Dropdown
-                                                                        offset={[0, 5]}
-                                                                        placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                                                        btnClassName="align-middle"
-                                                                        button={
-                                                                            <span
-                                                                                className={`badge rounded-full capitalize hover:top-0 hover:text-white ${
-                                                                                    task.tag === 'team'
-                                                                                        ? 'badge-outline-success hover:bg-success'
-                                                                                        : task.tag === 'update'
-                                                                                        ? 'badge-outline-info hover:bg-info'
-                                                                                        : task.tag === 'team' && isTagMenu === task.id
-                                                                                        ? 'text-white bg-success '
-                                                                                        : task.tag === 'update' && isTagMenu === task.id
-                                                                                        ? 'text-white bg-info '
-                                                                                        : ''
-                                                                                }`}
-                                                                            >
-                                                                                {task.tag}
-                                                                            </span>
-                                                                        }
-                                                                    >
-                                                                        <ul className="text-sm text-medium">
-                                                                            <li>
-                                                                                <button type="button" className="text-success" onClick={() => setTag(task, 'team')}>
-                                                                                    Team
-                                                                                </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <button type="button" className="text-info" onClick={() => setTag(task, 'update')}>
-                                                                                    Update
-                                                                                </button>
-                                                                            </li>
-                                                                            <li>
-                                                                                <button type="button" onClick={() => setTag(task, '')}>
-                                                                                    None
-                                                                                </button>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </Dropdown>
-                                                                </div>
-                                                            )}
+                                                            <span
+                                                                className={`badge rounded-full capitalize hover:top-0 hover:text-white badge-outline-success hover:bg-success`}
+                                                            >
+                                                                {task.tag? task.tag : 'Test suite'}
+                                                            </span>
                                                         </div>
                                                     </td>
                                                     <td className="w-1">
@@ -885,7 +378,7 @@ const Todolist = () => {
                                                     </td>
                                                     <td className="w-1">
                                                         <div className="flex items-center justify-between w-max ltr:ml-auto rtl:mr-auto">
-                                                            
+
                                                             <div className="dropdown">
                                                                 <Dropdown
                                                                     offset={[0, 5]}
@@ -909,7 +402,7 @@ const Todolist = () => {
                                                                                     </button>
                                                                                 </li>
                                                                                 <li>
-                                                                                    <button type="button" onClick={() => setImportant(task)}>
+                                                                                    <button type="button" onClick={() => runTest(task)}>
                                                                                         <IconStar className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0" />
                                                                                         Run
                                                                                     </button>
@@ -1097,24 +590,22 @@ const Todolist = () => {
                                             <div>{selectedTask.title}</div>
                                             {selectedTask.priority && (
                                                 <div
-                                                    className={`badge rounded-3xl capitalize ${
-                                                        selectedTask.priority === 'medium'
-                                                            ? 'badge-outline-primary'
-                                                            : selectedTask.priority === 'low'
+                                                    className={`badge rounded-3xl capitalize ${selectedTask.priority === 'medium'
+                                                        ? 'badge-outline-primary'
+                                                        : selectedTask.priority === 'low'
                                                             ? 'badge-outline-warning '
                                                             : selectedTask.priority === 'high'
-                                                            ? 'badge-outline-danger '
-                                                            : ''
-                                                    }`}
+                                                                ? 'badge-outline-danger '
+                                                                : ''
+                                                        }`}
                                                 >
                                                     {selectedTask.priority}
                                                 </div>
                                             )}
                                             {selectedTask.tag && (
                                                 <div
-                                                    className={`badge rounded-3xl capitalize ${
-                                                        selectedTask.tag === 'team' ? 'badge-outline-success' : selectedTask.tag === 'update' ? 'badge-outline-info ' : ''
-                                                    }`}
+                                                    className={`badge rounded-3xl capitalize ${selectedTask.tag === 'team' ? 'badge-outline-success' : selectedTask.tag === 'update' ? 'badge-outline-info ' : ''
+                                                        }`}
                                                 >
                                                     {selectedTask.tag}
                                                 </div>
