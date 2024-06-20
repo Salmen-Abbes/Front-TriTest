@@ -77,7 +77,7 @@ const Todolist = () => {
             if (response.ok) {
                 const data = await response.json();
                 const dataWithTags = data.map((test: any) => {
-                    const testSuite = testSuites.find((suite) => suite.id === test.testSuiteId);
+                    const testSuite: any = testSuites.find((suite: any) => suite.id === test.testSuiteId);
                     return {
                         ...test,
                         tag: testSuite ? testSuite.name : ''
@@ -110,17 +110,17 @@ const Todolist = () => {
             pager.currentPage = 1;
         }
         let res = allTasks;
-    
+
         if (selectedTab !== '') {
-            res = res.filter((d) => d.tag === selectedTab);
+            res = res.filter((d: any) => d.tag === selectedTab);
         }
-    
-        res = res.filter((d) =>
+
+        res = res.filter((d: any) =>
             d.title?.toLowerCase().includes(searchTask.toLowerCase()) ||
             d.description?.toLowerCase().includes(searchTask.toLowerCase()) ||
             d.tag?.toLowerCase().includes(searchTask.toLowerCase())
         );
-    
+
         setFilteredTasks(res);
         getPager(res);
     };
@@ -143,20 +143,23 @@ const Todolist = () => {
         });
     };
 
-    const runTest= async(task:any) =>{
-        try{
-            const reqBody = JSON.stringify({"testCase":task.id})
-            const response = await fetch('http://localhost:3000/api/testcase/execute',{
-            method:'POST',
-            body:reqBody,
-        })
-        if(response.ok){
-            showMessage(`${task.name} runned Successfuly`);
-        }
-        }catch(err:any){
+    const runTest = async (task: any) => {
+        try {
+            const reqBody = JSON.stringify({ "testCase": task.id })
+            const response = await fetch('http://localhost:3000/api/testcase/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: reqBody,
+            })
+            if (response.ok) {
+                showMessage(`${task.name} runned Successfuly`);
+            }
+        } catch (err: any) {
             console.log(err)
         }
-        
+
     }
     const tabChanged = () => {
         setIsShowTaskMenu(false);
@@ -212,6 +215,7 @@ const Todolist = () => {
         if (params.id) {
             //update task
             setAllTasks(
+                //@ts-ignore
                 allTasks.map((d: any) => {
                     if (d.id === params.id) {
                         d = params;
@@ -221,7 +225,9 @@ const Todolist = () => {
             );
         } else {
             //add task
-            const maxId = allTasks?.length ? allTasks.reduce((max, obj) => (obj.id > max ? obj.id : max), allTasks[0].id) : 0;
+            //@ts-ignore
+
+            const maxId = allTasks?.length ? allTasks.reduce((max: any, obj: any) => (obj.id > max ? obj.id : max), allTasks[0].id) : 0;
             const today = new Date();
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth());
@@ -230,6 +236,8 @@ const Todolist = () => {
             let task = params;
             task.id = maxId + 1;
             task.date = monthNames[mm] + ', ' + dd + ' ' + yyyy;
+            //@ts-ignore
+
             allTasks.unshift(task);
             searchTasks();
         }
@@ -274,7 +282,7 @@ const Todolist = () => {
                             <div className="space-y-1">
                                 <div className="h-px w-full border-b border-white-light dark:border-[#1b2e4b]"></div>
                                 <div className="text-white-dark px-1 py-3">Test Suites</div>
-                                {testSuites && testSuites.map((suite, index) => (
+                                {testSuites && testSuites.map((suite: any) => (
                                     <button
                                         key={suite?.id}
                                         type="button"
@@ -353,7 +361,7 @@ const Todolist = () => {
                             <div className="table-responsive grow overflow-y-auto sm:min-h-[300px] min-h-[400px]">
                                 <table className="table-hover">
                                     <tbody>
-                                        {pagedTasks.map((task:any) => {
+                                        {pagedTasks.map((task: any) => {
                                             return (
                                                 <tr className={`group cursor-pointer ${task.status === 'Passed' ? 'bg-white-light/30 dark:bg-[#1a2941]' : ''}`} key={task.id}>
                                                     <td className="w-1">
@@ -381,7 +389,7 @@ const Todolist = () => {
                                                             <span
                                                                 className={`badge rounded-full capitalize hover:top-0 hover:text-white badge-outline-success hover:bg-success`}
                                                             >
-                                                                {task.tag? task.tag : 'Test suite'}
+                                                                {task.tag ? task.tag : 'Test suite'}
                                                             </span>
                                                         </div>
                                                     </td>
