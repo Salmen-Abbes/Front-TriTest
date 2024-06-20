@@ -73,7 +73,7 @@ const Todolist = () => {
     }
     const fetchTest = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/testcases');
+            const response = await fetch('http://localhost:3000/api/testcase');
             if (response.ok) {
                 const data = await response.json();
                 const dataWithTags = data.map((test: any) => {
@@ -144,6 +144,18 @@ const Todolist = () => {
     };
 
     const runTest= async(task:any) =>{
+        try{
+            const reqBody = JSON.stringify({"testCase":task.id})
+            const response = await fetch('http://localhost:3000/api/testcase/execute',{
+            method:'POST',
+            body:reqBody,
+        })
+        if(response.ok){
+            showMessage(`${task.name} runned Successfuly`);
+        }
+        }catch(err:any){
+            console.log(err)
+        }
         
     }
     const tabChanged = () => {
