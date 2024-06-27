@@ -34,6 +34,7 @@ const Todolist = () => {
         navigator: '',
         path: '',
         url: '',
+        userId: null,
         priority: 'low',
     };
 
@@ -43,10 +44,17 @@ const Todolist = () => {
     const [viewTaskModal, setViewTaskModal] = useState(false);
     const [params, setParams] = useState<any>(JSON.parse(JSON.stringify(defaultParams)));
 
-    const [allTasks, setAllTasks] = useState([
-    ]);
-
+    const [allTasks, setAllTasks] = useState([]);
     const [filteredTasks, setFilteredTasks] = useState<any>(allTasks);
+
+
+    useEffect(() => {
+        setFilteredTasks(allTasks);
+        setPagedTasks(filteredTasks);
+
+    }, [allTasks])
+
+
     const [pagedTasks, setPagedTasks] = useState<any>(filteredTasks);
     const [searchTask, setSearchTask] = useState<any>('');
     const [selectedTask, setSelectedTask] = useState<any>(defaultParams);
@@ -58,9 +66,13 @@ const Todolist = () => {
         startIndex: 0,
         endIndex: 0,
     });
+
+    // console.log(pagedTasks);
+
+
     const fetchSuites = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/testsuites');
+            const response = await axios.get('http://localhost:7060/api/testsuite');
             setTestSuites(response.data);
             console.log('da')
         } catch (err) {
@@ -70,7 +82,7 @@ const Todolist = () => {
 
     const fetchTest = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/testcase');
+            const response = await axios.get('http://localhost:7060/api/TestCase');
             setAllTasks(response.data);
         } catch (err) {
             console.error(err);
@@ -80,7 +92,7 @@ const Todolist = () => {
     const runTest = async (task: any) => {
         try {
             const reqBody = { "testCase": task.testCaseId };
-            const response = await axios.post('http://localhost:3000/api/testcase/execute', reqBody, {
+            const response = await axios.post('http://localhost:7060/api/testcase/execute', reqBody, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -95,19 +107,22 @@ const Todolist = () => {
 
     const deleteTask = async (task: any) => {
         try {
-            const response = await axios.delete(`http://localhost:3000/api/testcase/${task.testCaseId}`);
-            if (response.status === 200) {
+            await axios.delete(`http://localhost:7060/api/testcase/${task.testCaseId}`).then(response => {
+
                 setAllTasks(allTasks.filter((d: any) => d.testCaseId !== task.testCaseId));
                 searchTasks(false);
-            } else if (response.status === 404) {
-                console.log(`Test case with id ${task.testCaseId} not found`);
-            } else {
-                console.error(`Error deleting test case with id ${task.testCaseId}: ${response.statusText}`);
-            }
+                console.log('Succès :', response.data);
+
+            })
+                .catch(error => {
+                    console.log('Erreur :', error.message);
+                });
+
         } catch (error: any) {
             console.error(`Error deleting test case with id ${task.testCaseId}: ${error.message}`);
         }
     };
+
     useEffect(() => {
         fetchSuites();
         fetchTest();
@@ -129,7 +144,7 @@ const Todolist = () => {
         let res = allTasks;
 
         if (selectedTab !== '') {
-            res = res.filter((d: any) => d.testSuiteId == selectedTab);
+            res = res.filter((d: any) => d.testSuiteId === selectedTab);
         }
 
         res = res.filter((d: any) =>
@@ -196,49 +211,62 @@ const Todolist = () => {
     };
 
 
-    const saveTask = async() => {
+    const saveTask = async () => {
         if (!params.testCaseName) {
             showMessage('Title is required.', 'error');
             return false;
         }
         if (params.testCaseId) {
             //update task
-            try{
-                const response = await axios.put(`http://localhost:3000/api/testcase/${params.testCaseId}`,params)
-            if(response.status===200){
-                setAllTasks(
-                    //@ts-ignore
-                    allTasks.map((d: any) => {
-                        if (d.testCaseId === params.testCaseId) {
-                            d = params;
-                        }
-                        return d;
-                    })
-                );
-            } 
-            }catch(err:any){
+            try {
+                const response = await axios.put(`http://localhost:7060/api/testcase/${params.testCaseId}`, params)
+                if (response.status === 200) {
+                    setAllTasks(
+                        //@ts-ignore
+                        allTasks.map((d: any) => {
+                            if (d.testCaseId === params.testCaseId) {
+                                d = params;
+                            }
+                            return d;
+                        })
+                    );
+                }
+            } catch (err: any) {
                 console.error(err)
             }
-              
-            
         } else {
-            //add task
             //@ts-ignore
             const maxId = allTasks?.length ? allTasks.reduce((max: any, obj: any) => (obj.id > max ? obj.id : max), allTasks[0].id) : 0;
             let task = params;
             task.testCaseId = maxId + 1;
-            
-            try{
-                let test ={
-                    testSuiteId:parseInt(task.testSuiteId),
-                    ...task
-                }
-                const response = await axios.post('http://localhost:3000/api/testcase',test)
-                if(response.status===200){
+
+            try {
+                const test = {
+                    testCaseName: task.testCaseName,
+                    testCaseDescription: task.testCaseDescription,
+                    descriptionText: task.descriptionText,
+                    navigator: task.navigator,
+                    path: task.path,
+                    url: task.url,
+                    userId: null,
+                    priority: task.priority,
+                    testSuiteId: parseInt(task.testSuiteId)
+
+                };
+                await axios.post('http://localhost:7060/api/TestCase', test).then(response => {
+                    console.log('Succès :', response.data);
+                    fetchTest()
                     //@ts-ignore
                     allTasks.unshift(task);
-            } 
-            }catch(err:any){
+                })
+                    .catch(error => {
+
+                        // Autre erreur
+                        console.log('Erreur :', error.message);
+
+                    });
+
+            } catch (err: any) {
                 console.error(err)
             }
             searchTasks();
@@ -252,7 +280,7 @@ const Todolist = () => {
             toast: true,
             position: 'top',
             showConfirmButton: false,
-            timer: 3000,
+            timer: 7060,
             customClass: { container: 'toast' },
         });
         toast.fire({
@@ -364,6 +392,8 @@ const Todolist = () => {
                                 <table className="table-hover">
                                     <tbody>
                                         {pagedTasks.map((task: any) => {
+                                            const testSuite = testSuites?.find((suite: any) => suite.testSuiteId == task.testSuiteId);
+
                                             return (
                                                 <tr className={`group cursor-pointer `} key={task.testCaseId}>
                                                     <td className="w-1">
@@ -391,7 +421,7 @@ const Todolist = () => {
                                                             <span
                                                                 className={`badge rounded-full capitalize hover:top-0 hover:text-white badge-outline-success hover:bg-success`}
                                                             >
-                                                                {testSuites?.find((suite: any) => suite.testSuiteId == task.testSuiteId).testSuiteName}
+                                                                {testSuite?.testSuiteName || "Nothing"}
                                                             </span>
                                                         </div>
                                                     </td>

@@ -80,7 +80,7 @@ const Notes = () => {
     
     const fetchTest = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/testcase');
+            const response = await axios.get('http://localhost:7060/api/testcase');
             setTestCases(response.data)
             console.log(notesList)
         } catch (err) {
@@ -89,7 +89,7 @@ const Notes = () => {
     };
     const fetchScenarios = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/scenario');
+            const response = await axios.get('http://localhost:7060/api/scenario');
             setNoteList(response.data)
         } catch (err) {
             console.error(err);
@@ -216,7 +216,7 @@ const Notes = () => {
             toast: true,
             position: 'top',
             showConfirmButton: false,
-            timer: 3000,
+            timer: 7060,
             customClass: { container: 'toast' },
         });
         toast.fire({
