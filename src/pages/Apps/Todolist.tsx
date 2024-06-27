@@ -236,7 +236,7 @@ const Todolist = () => {
             }
         } else {
             //@ts-ignore
-            const maxId = allTasks?.length ? allTasks.reduce((max: any, obj: any) => (obj.id > max ? obj.id : max), allTasks[0].id) : 0;
+            const maxId = allTasks?.length ? allTasks.reduce((max: any, obj: any) => (obj.testCaseId > max ? obj.testCaseId : max), allTasks[0].testCaseId) : 0;
             let task = params;
             task.testCaseId = maxId + 1;
 

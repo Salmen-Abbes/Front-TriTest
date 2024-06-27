@@ -7,16 +7,13 @@ import { IRootState } from '../../store';
 import Dropdown from '../../components/Dropdown';
 import { setPageTitle } from '../../store/themeConfigSlice';
 import IconNotes from '../../components/Icon/IconNotes';
-import IconNotesEdit from '../../components/Icon/IconNotesEdit';
 import IconStar from '../../components/Icon/IconStar';
 import IconSquareRotated from '../../components/Icon/IconSquareRotated';
 import IconPlus from '../../components/Icon/IconPlus';
 import IconMenu from '../../components/Icon/IconMenu';
-import IconUser from '../../components/Icon/IconUser';
 import IconHorizontalDots from '../../components/Icon/IconHorizontalDots';
 import IconPencil from '../../components/Icon/IconPencil';
 import IconTrashLines from '../../components/Icon/IconTrashLines';
-import IconEye from '../../components/Icon/IconEye';
 import IconX from '../../components/Icon/IconX';
 import axios from 'axios'
 const Notes = () => {
@@ -25,126 +22,93 @@ const Notes = () => {
         dispatch(setPageTitle('Scenarios'));
     });
     const [notesList, setNoteList] = useState([
-        {
-            id: 1,
-            user: 'Max Smith',
-            thumb: 'profile-16.jpeg',
-            title: 'Meeting with Kelly',
-            description: 'Curabitur facilisis vel elit sed dapibus sodales purus rhoncus.',
-            date: '11/01/2020',
-            isFav: false,
-            tag: 'personal',
-        },
-        {
-            id: 2,
-            user: 'John Doe',
-            thumb: 'profile-14.jpeg',
-            title: 'Receive Package',
-            description: 'Facilisis curabitur facilisis vel elit sed dapibus sodales purus.',
-            date: '11/02/2020',
-            isFav: true,
-            tag: 'work',
-        },
-        {
-            id: 3,
-            user: 'Kia Jain',
-            thumb: 'profile-15.jpeg',
-            title: 'Download Docs',
-            description: 'Proin a dui malesuada, laoreet mi vel, imperdiet diam quam laoreet.',
-            date: '11/04/2020',
-            isFav: false,
-            tag: 'social',
-        },
-        {
-            id: 4,
-            user: 'Max Smith',
-            thumb: 'profile-16.jpeg',
-            title: 'Meeting at 4:50pm',
-            description: 'Excepteur sint occaecat cupidatat non proident, anim id est laborum.',
-            date: '11/08/2020',
-            isFav: false,
-            tag: 'important',
-        }
     ]);
 
-    const defaultParams = { id: null, title: '', description: '', tag: '', user: '', thumb: '' };
+    const defaultParams = { scenarioId: null, testCaseId: '', commande: '', path: '', value: '', url: '' };
     const [params, setParams] = useState<any>(JSON.parse(JSON.stringify(defaultParams)));
     const [addContactModal, setAddContactModal] = useState<any>(false);
     const [isDeleteNoteModal, setIsDeleteNoteModal] = useState<any>(false);
     const [isShowNoteMenu, setIsShowNoteMenu] = useState<any>(false);
     const [isViewNoteModal, setIsViewNoteModal] = useState<any>(false);
     const [filterdNotesList, setFilterdNotesList] = useState<any>([]);
-    const [selectedTab, setSelectedTab] = useState<any>('all');
+    const [selectedTab, setSelectedTab] = useState<any>('');
     const [deletedNote, setDeletedNote] = useState<any>(null);
     const [testCases, setTestCases] = useState<any>(null)
-    
-    const fetchTest = async () => {
-        try {
-            const response = await axios.get('http://localhost:7060/api/testcase');
-            setTestCases(response.data)
-            console.log(notesList)
-        } catch (err) {
-            console.error(err);
-        }
-    };
-    const fetchScenarios = async () => {
-        try {
-            const response = await axios.get('http://localhost:7060/api/scenario');
-            setNoteList(response.data)
-        } catch (err) {
-            console.error(err);
-        }
+
+    const fetchTest = () => {
+        axios.get('http://localhost:7060/api/testcase')
+            .then(response => {
+                setTestCases(response.data);
+                console.log(notesList);
+            })
+            .catch(err => {
+                console.error(err);
+            });
     };
 
-    useEffect(()=>{
+    const fetchScenarios = () => {
+        axios.get('http://localhost:7060/api/scenario')
+            .then(response => {
+                console.log(response);
+                setNoteList(response.data);
+                setFilterdNotesList(response.data);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    };
+
+    useEffect(() => {
         fetchScenarios();
         fetchTest();
-    },[])
+    }, [])
 
     const searchNotes = () => {
-        if (selectedTab !== 'fav') {
-            if (selectedTab !== 'all' || selectedTab === 'delete') {
-                setFilterdNotesList(notesList.filter((d) => d.tag === selectedTab));
-            } else {
-                setFilterdNotesList(notesList);
-            }
-        } else {
-            setFilterdNotesList(notesList.filter((d) => d.isFav));
+        let res = notesList;
+        console.log(selectedTab)
+        console.log(res)
+        if (selectedTab !== '') {
+            res = res.filter((d: any) => d.testCaseId == selectedTab);
         }
+        console.log(res)
+        setFilterdNotesList(res);
     };
 
-    const saveNote = () => {
-        if (!params.title) {
-            showMessage('Title is required.', 'error');
+    const saveNote = async () => {
+        if (!params.testCaseId) {
+            showMessage('Test Case Required.', 'error');
             return false;
         }
-        if (params.id) {
+        if (params.scenarioId) {
             //update task
-            let note: any = notesList.find((d: any) => d.id === params.id);
-            note.title = params.title;
-            note.user = params.user;
-            note.description = params.description;
-            note.tag = params.tag;
+            let note: any = notesList.find((d: any) => d.scenarioId === params.scenarioId);
+            note.testCaseId = params.testCaseId;
+            note.commande = params.commande;
+            note.path = params.path;
+            note.value = params.value;
+            note.url = params.url;
         } else {
             //add note
-            let maxNoteId = notesList.reduce((max: any, character: any) => (character.id > max ? character.id : max), notesList[0].id);
+            //@ts-ignore
+            let maxNoteId = notesList.reduce((max: any, character: any) => (character.scenarioId > max ? character.scenarioId : max), notesList[0].scenarioId);
             if (!maxNoteId) {
                 maxNoteId = 0;
             }
-            let dt = new Date();
             let note = {
-                id: maxNoteId + 1,
-                title: params.title,
-                user: params.user,
-                thumb: 'profile-21.jpeg',
-                description: params.description,
-                date: dt.getDate() + '/' + Number(dt.getMonth()) + 1 + '/' + dt.getFullYear(),
-                isFav: false,
-                tag: params.tag,
+                scenarioId: maxNoteId + 1,
+                testCaseId: params.testCaseId,
+                commande: params.commande,
+                path: params.path,
+                value: params.value,
+                url: params.url,
             };
+            await axios.post('http://localhost:7060/api/scenario', note).then(response => {
+                if (response.status === 200) {
+                    //@ts-ignore
+                    fetchScenarios();
+                }
+            })
 
-            notesList.splice(0, 0, note);
-            searchNotes();
         }
         showMessage('Scenario has been saved successfully.');
         setAddContactModal(false);
@@ -152,30 +116,8 @@ const Notes = () => {
     };
 
     const tabChanged = (type: string) => {
-        setSelectedTab(type);
         setIsShowNoteMenu(false);
         searchNotes();
-    };
-
-    const setFav = (note: any) => {
-        let list = filterdNotesList;
-        let item = list.find((d: any) => d.id === note.id);
-        item.isFav = !item.isFav;
-
-        setFilterdNotesList([...list]);
-        if (selectedTab !== 'all' || selectedTab === 'delete') {
-            searchNotes();
-        }
-    };
-
-    const setTag = (note: any, name: string = '') => {
-        let list = filterdNotesList;
-        let item = filterdNotesList.find((d: any) => d.id === note.id);
-        item.tag = name;
-        setFilterdNotesList([...list]);
-        if (selectedTab !== 'all' || selectedTab === 'delete') {
-            searchNotes();
-        }
     };
 
     const changeValue = (e: any) => {
@@ -188,27 +130,33 @@ const Notes = () => {
         setIsDeleteNoteModal(true);
     };
 
-    const viewNote = (note: any) => {
-        setParams(note);
-        setIsViewNoteModal(true);
-    };
 
     const editNote = (note: any = null) => {
         setIsShowNoteMenu(false);
+
         const json = JSON.parse(JSON.stringify(defaultParams));
         setParams(json);
         if (note) {
-            let json1 = JSON.parse(JSON.stringify(note));
-            setParams(json1);
+            axios.put(`http://localhost:7060/api/scenario/${note?.scenarioId}`, note).then((response) => {
+                if (response.status === 200) {
+                    let json1 = JSON.parse(JSON.stringify(note));
+                    setParams(json1);
+                }
+            }).catch((err) => {
+                showMessage(err, 'error')
+            })
         }
         setAddContactModal(true);
     };
 
     const deleteNote = () => {
-        setNoteList(notesList.filter((d: any) => d.id !== deletedNote.id));
-        searchNotes();
-        showMessage('Note has been deleted successfully.');
-        setIsDeleteNoteModal(false);
+        axios.delete(`http://localhost:7060/api/scenario/${deletedNote.scenarioId}`).then((res) => {
+            if (res.status === 200) {
+                fetchScenarios();
+                showMessage('Scenario has been deleted successfully.');
+                setIsDeleteNoteModal(false);
+            }
+        })
     };
 
     const showMessage = (msg = '', type = 'success') => {
@@ -229,7 +177,7 @@ const Notes = () => {
     useEffect(() => {
         searchNotes();
         /* eslint-disable react-hooks/exhaustive-deps */
-    }, [selectedTab, notesList]);
+    }, [selectedTab]);
 
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
@@ -298,19 +246,19 @@ const Notes = () => {
                             <IconMenu />
                         </button>
                     </div>
-                    {filterdNotesList.length ? (
+                    {filterdNotesList.length > 0 ? (
                         <div className="sm:min-h-[300px] min-h-[400px]">
                             <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5">
                                 {filterdNotesList.map((note: any) => {
                                     return (
                                         <div
                                             className={`panel pb-12 bg-success-light shadow-success`}
-                                            key={note.id}
+                                            key={note.scenarioId}
                                         >
                                             <div className="min-h-[142px]">
                                                 <div className="flex justify-between">
                                                     <div className="flex items-center w-max">
-                                                       
+
                                                         <div className="ltr:ml-2 rtl:mr-2">
                                                             <div className="font-semibold">{note.commande}</div>
                                                             <div className="text-sx text-white-dark">{note.path}</div>
@@ -336,22 +284,19 @@ const Notes = () => {
                                                                         Delete
                                                                     </button>
                                                                 </li>
-                                                                <li>
-                                                                    <button type="button" onClick={() => viewNote(note)}>
-                                                                        <IconEye className="w-4.5 h-4.5 ltr:mr-3 rtl:ml-3 shrink-0" />
-                                                                        Assign TestCase
-                                                                    </button>
-                                                                </li>
+
                                                             </ul>
                                                         </Dropdown>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <h4 className="font-semibold mt-4">{note.tagValue}</h4>
                                                     <p className="text-white-dark mt-2">{note.value}</p>
                                                 </div>
+                                                <div>
+                                                    <p className="text-white-dark mt-2">{note.url}</p>
+                                                </div>
                                             </div>
-                                            
+
                                         </div>
                                     );
                                 })}
@@ -395,51 +340,39 @@ const Notes = () => {
                                                 <IconX />
                                             </button>
                                             <div className="text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
-                                                {params.id ? 'Edit Scenario' : 'Add Scenario'}
+                                                {params.scenarioId ? 'Edit Scenario' : 'Add Scenario'}
                                             </div>
                                             <div className="p-5">
                                                 <form>
                                                     <div className="mb-5">
-                                                        <label htmlFor="title">Title</label>
-                                                        <input id="title" type="text" placeholder="Enter Title" className="form-input" value={params.title} onChange={(e) => changeValue(e)} />
-                                                    </div>
-                                                    <div className="mb-5">
-                                                        <label htmlFor="name">Test Case</label>
-                                                        <select id="user" className="form-select" value={params.user} onChange={(e) => changeValue(e)}>
-                                                            <option value="">Select User</option>
-                                                            <option value="Max Smith">Test 1</option>
-                                                            <option value="John Doe">Test 2</option>
-                                                            <option value="Kia Jain">Test 3</option>
-
+                                                        <label htmlFor="testCaseId">Test Case</label>
+                                                        <select id="testCaseId" className="form-select" value={params.testCaseId} onChange={(e) => changeValue(e)}>
+                                                            <option value="">Select Test Case</option>
+                                                            {testCases?.map((test: any) => <option key={test.testCaseId} value={test.testCaseId}>{test.testCaseName}</option>)}
                                                         </select>
                                                     </div>
                                                     <div className="mb-5">
-                                                        <label htmlFor="tag">Tag</label>
-                                                        <select id="tag" className="form-select" value={params.tag} onChange={(e) => changeValue(e)}>
-                                                            <option value="">None</option>
-                                                            <option value="personal">Personal</option>
-                                                            <option value="work">Work</option>
-                                                            <option value="social">Social</option>
-                                                            <option value="important">Important</option>
-                                                        </select>
+                                                        <label htmlFor="commande">Commande</label>
+                                                        <input id="commande" type="text" placeholder="Enter Commande" className="form-input" value={params.commande} onChange={(e) => changeValue(e)} />
                                                     </div>
                                                     <div className="mb-5">
-                                                        <label htmlFor="desc">Description</label>
-                                                        <textarea
-                                                            id="description"
-                                                            rows={3}
-                                                            className="form-textarea resize-none min-h-[130px]"
-                                                            placeholder="Enter Description"
-                                                            value={params.description}
-                                                            onChange={(e) => changeValue(e)}
-                                                        ></textarea>
+                                                        <label htmlFor="path">Path</label>
+                                                        <input id="path" type="text" placeholder="Enter Path" className="form-input" value={params.path} onChange={(e) => changeValue(e)} />
+                                                    </div>
+                                                    <div className="mb-5">
+                                                        <label htmlFor="value">Value</label>
+                                                        <input id="value" type="text" placeholder="Enter Value" className="form-input" value={params.value} onChange={(e) => changeValue(e)} />
+                                                    </div>
+                                                    <div className="mb-5">
+                                                        <label htmlFor="url">URL</label>
+                                                        <input id="url" type="text" placeholder="Enter URL" className="form-input" value={params.url} onChange={(e) => changeValue(e)} />
                                                     </div>
                                                     <div className="flex justify-end items-center mt-8">
                                                         <button type="button" className="btn btn-outline-danger gap-2" onClick={() => setAddContactModal(false)}>
                                                             Cancel
                                                         </button>
                                                         <button type="button" className="btn btn-primary ltr:ml-4 rtl:mr-4" onClick={saveNote}>
-                                                            {params.id ? 'Update Note' : 'Add Note'}
+                                                            {params.scenarioId ? 'Update Note' : 'Add Note'}
                                                         </button>
                                                     </div>
                                                 </form>
@@ -489,7 +422,7 @@ const Notes = () => {
                                                 <div className="text-white bg-danger ring-4 ring-danger/30 p-4 rounded-full w-fit mx-auto">
                                                     <IconTrashLines className="w-7 h-7 mx-auto" />
                                                 </div>
-                                                <div className="sm:w-3/4 mx-auto mt-5">Are you sure you want to delete Notes?</div>
+                                                <div className="sm:w-3/4 mx-auto mt-5">Are you sure you want to delete Scenario?</div>
 
                                                 <div className="flex justify-center items-center mt-8">
                                                     <button type="button" className="btn btn-outline-danger" onClick={() => setIsDeleteNoteModal(false)}>
@@ -546,9 +479,9 @@ const Notes = () => {
                                                     <button
                                                         type="button"
                                                         className={`badge badge-outline-primary rounded-3xl capitalize ltr:mr-3 rtl:ml-3 ${(params.tag === 'personal' && 'shadow-primary',
-                                                                params.tag === 'work' && 'shadow-warning',
-                                                                params.tag === 'social' && 'shadow-info',
-                                                                params.tag === 'important' && 'shadow-danger')
+                                                            params.tag === 'work' && 'shadow-warning',
+                                                            params.tag === 'social' && 'shadow-info',
+                                                            params.tag === 'important' && 'shadow-danger')
                                                             }`}
                                                     >
                                                         {params.tag}
@@ -560,15 +493,7 @@ const Notes = () => {
                                                     </button>
                                                 )}
                                             </div>
-                                            <div className="p-5">
-                                                <div className="text-base">{params.description}</div>
 
-                                                <div className="ltr:text-right rtl:text-left mt-8">
-                                                    <button type="button" className="btn btn-outline-danger" onClick={() => setIsViewNoteModal(false)}>
-                                                        Close
-                                                    </button>
-                                                </div>
-                                            </div>
                                         </Dialog.Panel>
                                     </Transition.Child>
                                 </div>
