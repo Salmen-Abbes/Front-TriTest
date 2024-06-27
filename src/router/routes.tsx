@@ -142,7 +142,7 @@ const routes = [
         element: <Mailbox />,
     },
     {
-        path: '/apps/invoice/list',
+        path: '/apps/suites',
         element: <List />,
     },
     // Apps page

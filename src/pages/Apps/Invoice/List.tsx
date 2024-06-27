@@ -1,313 +1,232 @@
-import { Link, NavLink } from 'react-router-dom';
-import { DataTable, DataTableSortStatus } from 'mantine-datatable';
-import { useState, useEffect } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { useMantineTheme } from '@mantine/core';
+import axios from 'axios';
 import sortBy from 'lodash/sortBy';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../../store';
-import { setPageTitle } from '../../../store/themeConfigSlice';
-import IconTrashLines from '../../../components/Icon/IconTrashLines';
-import IconPlus from '../../../components/Icon/IconPlus';
+import { DataTable, DataTableSortStatus } from 'mantine-datatable';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import IconEdit from '../../../components/Icon/IconEdit';
-import IconEye from '../../../components/Icon/IconEye';
+import IconPlus from '../../../components/Icon/IconPlus';
+import IconTrashLines from '../../../components/Icon/IconTrashLines';
+import IconX from '../../../components/Icon/IconX';
+import { setPageTitle } from '../../../store/themeConfigSlice';
 
 const List = () => {
+    const theme = useMantineTheme();
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setPageTitle('Invoice List'));
-    });
-    const [items, setItems] = useState([
-        {
-            id: 1,
-            invoice: '081451',
-            name: 'Laurie Fox',
-            email: 'lauriefox@company.com',
-            date: '15 Dec 2020',
-            amount: '2275.45',
-            status: { tooltip: 'Paid', color: 'success' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 2,
-            invoice: '081452',
-            name: 'Alexander Gray',
-            email: 'alexGray3188@gmail.com',
-            date: '20 Dec 2020',
-            amount: '1044.00',
-            status: { tooltip: 'Paid', color: 'success' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 3,
-            invoice: '081681',
-            name: 'James Taylor',
-            email: 'jamestaylor468@gmail.com',
-            date: '27 Dec 2020',
-            amount: '20.00',
-            status: { tooltip: 'Pending', color: 'danger' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 4,
-            invoice: '082693',
-            name: 'Grace Roberts',
-            email: 'graceRoberts@company.com',
-            date: '31 Dec 2020',
-            amount: '344.00',
-            status: { tooltip: 'Paid', color: 'success' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 5,
-            invoice: '084743',
-            name: 'Donna Rogers',
-            email: 'donnaRogers@hotmail.com',
-            date: '03 Jan 2021',
-            amount: '405.15',
-            status: { tooltip: 'Paid', color: 'success' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 6,
-            invoice: '086643',
-            name: 'Amy Diaz',
-            email: 'amy968@gmail.com',
-            date: '14 Jan 2020',
-            amount: '100.00',
-            status: { tooltip: 'Paid', color: 'success' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 7,
-            invoice: '086773',
-            name: 'Nia Hillyer',
-            email: 'niahillyer666@comapny.com',
-            date: '20 Jan 2021',
-            amount: '59.21',
-            status: { tooltip: 'Pending', color: 'danger' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 8,
-            invoice: '087916',
-            name: 'Mary McDonald',
-            email: 'maryDonald007@gamil.com',
-            date: '25 Jan 2021',
-            amount: '79.00',
-            status: { tooltip: 'Pending', color: 'danger' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 9,
-            invoice: '089472',
-            name: 'Andy King',
-            email: 'kingandy07@company.com',
-            date: '28 Jan 2021',
-            amount: '149.00',
-            status: { tooltip: 'Paid', color: 'success' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 10,
-            invoice: '091768',
-            name: 'Vincent Carpenter',
-            email: 'vincentcarpenter@gmail.com',
-            date: '30 Jan 2021',
-            amount: '400',
-            status: { tooltip: 'Paid', color: 'success' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 11,
-            invoice: '095841',
-            name: 'Kelly Young',
-            email: 'youngkelly@hotmail.com',
-            date: '06 Feb 2021',
-            amount: '49.00',
-            status: { tooltip: 'Pending', color: 'danger' },
-            profile: 'profile-1.jpeg',
-        },
-        {
-            id: 12,
-            invoice: '098424',
-            name: 'Alma Clarke',
-            email: 'alma.clarke@gmail.com',
-            date: '10 Feb 2021',
-            amount: '234.40',
-            status: { tooltip: 'Paid', color: 'success' },
-            profile: 'profile-1.jpeg',
-        },
-    ]);
+        dispatch(setPageTitle('Test Suites'));
+        fetchSuites();
+    }, [dispatch]);
 
-    const deleteRow = (id: any = null) => {
-        if (window.confirm('Are you sure want to delete selected row ?')) {
-            if (id) {
-                setRecords(items.filter((user) => user.id !== id));
-                setInitialRecords(items.filter((user) => user.id !== id));
-                setItems(items.filter((user) => user.id !== id));
-                setSearch('');
-                setSelectedRecords([]);
-            } else {
-                let selectedRows = selectedRecords || [];
-                const ids = selectedRows.map((d: any) => {
-                    return d.id;
-                });
-                const result = items.filter((d) => !ids.includes(d.id as never));
-                setRecords(result);
-                setInitialRecords(result);
-                setItems(result);
-                setSearch('');
-                setSelectedRecords([]);
-                setPage(1);
-            }
+    const [items, setItems] = useState([]);
+    const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+        columnAccessor: 'testSuiteId',
+        direction: 'asc',
+    });
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [selectedRecords, setSelectedRecords] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalType, setModalType] = useState('');
+    const [currentSuite, setCurrentSuite] = useState<any>({ testSuiteName: '', testSuiteDescription: '' });
+
+    const fetchSuites = async () => {
+        try {
+            const response = await axios.get('http://localhost:7060/api/testsuite');
+            setItems(response.data);
+        } catch (err) {
+            console.error(err);
         }
     };
 
-    const [page, setPage] = useState(1);
-    const PAGE_SIZES = [10, 20, 30, 50, 100];
-    const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
-    const [initialRecords, setInitialRecords] = useState(sortBy(items, 'invoice'));
-    const [records, setRecords] = useState(initialRecords);
-    const [selectedRecords, setSelectedRecords] = useState<any>([]);
+    const deleteRow = async (id: number) => {
+            try {
+                await axios.delete(`http://localhost:7060/api/testsuite/${id}`);
+                setItems(items.filter((item: any) => item.testSuiteId !== id));
+            } catch (err) {
+                console.error(err);
+            }
+        
+    };
 
-    const [search, setSearch] = useState('');
-    const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
-        columnAccessor: 'firstName',
-        direction: 'asc',
-    });
+    const openModal = (type: string, suite: any = null) => {
+        setModalType(type);
+        if (type === 'edit' && suite) {
+            setCurrentSuite(suite);
+        } else {
+            setCurrentSuite({ testSuiteName: '', testSuiteDescription: '' });
+        }
+        setModalOpen(true);
+    };
 
-    useEffect(() => {
-        setPage(1);
-        /* eslint-disable react-hooks/exhaustive-deps */
-    }, [pageSize]);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { id, value } = e.target;
+        setCurrentSuite((prev: any) => ({ ...prev, [id]: value }));
+    };
 
-    useEffect(() => {
-        const from = (page - 1) * pageSize;
-        const to = from + pageSize;
-        setRecords([...initialRecords.slice(from, to)]);
-    }, [page, pageSize, initialRecords]);
-
-    useEffect(() => {
-        setInitialRecords(() => {
-            return items.filter((item) => {
-                return (
-                    item.invoice.toLowerCase().includes(search.toLowerCase()) ||
-                    item.name.toLowerCase().includes(search.toLowerCase()) ||
-                    item.email.toLowerCase().includes(search.toLowerCase()) ||
-                    item.date.toLowerCase().includes(search.toLowerCase()) ||
-                    item.amount.toLowerCase().includes(search.toLowerCase()) ||
-                    item.status.tooltip.toLowerCase().includes(search.toLowerCase())
-                );
-            });
-        });
-    }, [search]);
-
-    useEffect(() => {
-        const data2 = sortBy(initialRecords, sortStatus.columnAccessor);
-        setRecords(sortStatus.direction === 'desc' ? data2.reverse() : data2);
-        setPage(1);
-    }, [sortStatus]);
+    const handleSave = async () => {
+        try {
+            if (modalType === 'add') {
+                await axios.post('http://localhost:7060/api/testsuite', currentSuite);
+            } else {
+                await axios.put(`http://localhost:7060/api/testsuite/${currentSuite.testSuiteId}`, currentSuite);
+            }
+            fetchSuites();
+            setModalOpen(false);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     return (
-        <div className="panel px-0 border-white-light dark:border-[#1b2e4b]">
-            <div className="invoice-table">
-                <div className="mb-4.5 px-5 flex md:items-center md:flex-row flex-col gap-5">
-                    <div className="flex items-center gap-2">
-                        <button type="button" className="btn btn-danger gap-2" onClick={() => deleteRow()}>
-                            <IconTrashLines />
-                            Delete
-                        </button>
-                        <Link to="/apps/invoice/add" className="btn btn-primary gap-2">
-                            <IconPlus />
-                            Add New
-                        </Link>
-                    </div>
-                    <div className="ltr:ml-auto rtl:mr-auto">
-                        <input type="text" className="form-input w-auto" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
-                    </div>
-                </div>
-
-                <div className="datatables pagination-padding">
-                    <DataTable
-                        className="whitespace-nowrap table-hover invoice-table"
-                        records={records}
-                        columns={[
-                            {
-                                accessor: 'invoice',
-                                sortable: true,
-                                render: ({ invoice }) => (
-                                    <NavLink to="/apps/invoice/preview">
-                                        <div className="text-primary underline hover:no-underline font-semibold">{`#${invoice}`}</div>
-                                    </NavLink>
-                                ),
-                            },
-                            {
-                                accessor: 'name',
-                                sortable: true,
-                                render: ({ name, id }) => (
-                                    <div className="flex items-center font-semibold">
-                                        <div className="p-0.5 bg-white-dark/30 rounded-full w-max ltr:mr-2 rtl:ml-2">
-                                            <img className="h-8 w-8 rounded-full object-cover" src={`/assets/images/profile-${id}.jpeg`} alt="" />
-                                        </div>
-                                        <div>{name}</div>
-                                    </div>
-                                ),
-                            },
-                            {
-                                accessor: 'email',
-                                sortable: true,
-                            },
-                            {
-                                accessor: 'date',
-                                sortable: true,
-                            },
-                            {
-                                accessor: 'amount',
-                                sortable: true,
-                                titleClassName: 'text-right',
-                                render: ({ amount, id }) => <div className="text-right font-semibold">{`$${amount}`}</div>,
-                            },
-                            {
-                                accessor: 'status',
-                                sortable: true,
-                                render: ({ status }) => <span className={`badge badge-outline-${status.color} `}>{status.tooltip}</span>,
-                            },
-                            {
-                                accessor: 'action',
-                                title: 'Actions',
-                                sortable: false,
-                                textAlignment: 'center',
-                                render: ({ id }) => (
-                                    <div className="flex gap-4 items-center w-max mx-auto">
-                                        <NavLink to="/apps/invoice/edit" className="flex hover:text-info">
-                                            <IconEdit className="w-4.5 h-4.5" />
-                                        </NavLink>
-                                        <NavLink to="/apps/invoice/preview" className="flex hover:text-primary">
-                                            <IconEye />
-                                        </NavLink>
-                                        {/* <NavLink to="" className="flex"> */}
-                                        <button type="button" className="flex hover:text-danger" onClick={(e) => deleteRow(id)}>
-                                            <IconTrashLines />
-                                        </button>
-                                        {/* </NavLink> */}
-                                    </div>
-                                ),
-                            },
-                        ]}
-                        highlightOnHover
-                        totalRecords={initialRecords.length}
-                        recordsPerPage={pageSize}
-                        page={page}
-                        onPageChange={(p) => setPage(p)}
-                        recordsPerPageOptions={PAGE_SIZES}
-                        onRecordsPerPageChange={setPageSize}
-                        sortStatus={sortStatus}
-                        onSortStatusChange={setSortStatus}
-                        selectedRecords={selectedRecords}
-                        onSelectedRecordsChange={setSelectedRecords}
-                        paginationText={({ from, to, totalRecords }) => `Showing  ${from} to ${to} of ${totalRecords} entries`}
-                    />
-                </div>
+        <div>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold">Test Suites</h1>
+                <button onClick={() => openModal('add')} className="btn btn-primary flex items-center">
+                    <IconPlus className="mr-2" />
+                    Add Test Suite
+                </button>
             </div>
+            <div className="card">
+                <DataTable
+                    sx={{
+                        '& tr': {
+                            backgroundColor: 'transparent',
+                            color: 'rgb(136, 142, 168)',
+                        },
+                        '& .mantine-Datatable-pagination, & .mantine-Datatable-footer': {
+                            backgroundColor: 'transparent',
+                            color: 'rgb(136, 142, 168)',
+                        },
+                        '& .mantine-Datatable-body, & .mantine-Datatable-header': {
+                            backgroundColor: 'transparent',
+                            color: 'rgb(136, 142, 168)',
+                        },
+                    }}
+                    className="bg-transparent dark:bg-transparent"
+                    withBorder={false}
+                    columns={[
+                        { accessor: 'testSuiteId', title: 'ID', width: 80 },
+                        { accessor: 'testSuiteName', title: 'Name' },
+                        { accessor: 'testSuiteDescription', title: 'Description' },
+                        { accessor: 'testCases', title: 'TestCases' },
+                        {
+                            accessor: 'actions',
+                            title: 'Actions',
+                            textAlignment: 'center',
+                            render: ({ testSuiteId, testSuiteName, testSuiteDescription }) => (
+                                <div className="flex gap-4 items-center justify-center">
+                                    <button
+                                        type="button"
+                                        className="flex hover:text-info"
+                                        onClick={() =>
+                                            openModal('edit', { testSuiteId, testSuiteName, testSuiteDescription })
+                                        }
+                                    >
+                                        <IconEdit className="w-4.5 h-4.5" />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="flex hover:text-danger"
+                                        onClick={() => deleteRow(testSuiteId)}
+                                    >
+                                        <IconTrashLines className="w-4.5 h-4.5" />
+                                    </button>
+                                </div>
+                            ),
+                        },
+                    ]}
+                    records={items}
+                    highlightOnHover
+                />
+
+
+            </div>
+            <Transition appear show={modalOpen} as={Fragment}>
+                <Dialog as="div" open={modalOpen} onClose={() => setModalOpen(false)} className="relative z-[51]">
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-[black]/60" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 overflow-y-auto">
+                        <div className="flex min-h-full items-center justify-center px-4 py-8">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 scale-95"
+                                enterTo="opacity-100 scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 scale-100"
+                                leaveTo="opacity-0 scale-95"
+                            >
+                                <Dialog.Panel className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg text-black dark:text-white-dark">
+                                    <button
+                                        type="button"
+                                        onClick={() => setModalOpen(false)}
+                                        className="absolute top-4 ltr:right-4 rtl:left-4 text-gray-400 hover:text-gray-800 dark:hover:text-gray-600 outline-none"
+                                    >
+                                        <IconX />
+                                    </button>
+                                    <div className="text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
+                                        {modalType === 'edit' ? 'Edit Test Suite' : 'Add Test Suite'}
+                                    </div>
+                                    <div className="p-5">
+                                        <form>
+                                            <div className="mb-5">
+                                                <label htmlFor="testSuiteName">Name</label>
+                                                <input
+                                                    id="testSuiteName"
+                                                    type="text"
+                                                    placeholder="Enter Test Suite Name"
+                                                    className="form-input"
+                                                    value={currentSuite.testSuiteName}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                            <div className="mb-5">
+                                                <label htmlFor="testSuiteDescription">Description</label>
+                                                <textarea
+                                                    id="testSuiteDescription"
+                                                    placeholder="Enter Test Suite Description"
+                                                    className="form-input"
+                                                    value={currentSuite.testSuiteDescription}
+                                                    onChange={handleChange}
+                                                    style={{ minHeight: '100px' }}
+                                                />
+                                            </div>
+                                            <div className="flex justify-end items-center mt-8">
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-outline-danger"
+                                                    onClick={() => setModalOpen(false)}
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-primary ltr:ml-4 rtl:mr-4"
+                                                    onClick={handleSave}
+                                                >
+                                                    {modalType === 'edit' ? 'Update' : 'Add'}
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition>
         </div>
     );
 };

@@ -70,36 +70,38 @@ const Todolist = () => {
     // console.log(pagedTasks);
 
 
-    const fetchSuites = async () => {
+    const fetchSuites = () => {
         try {
-            const response = await axios.get('http://localhost:7060/api/testsuite');
-            setTestSuites(response.data);
-            console.log('da')
+            axios.get('http://localhost:7060/api/testsuite').then((response) => {
+                setTestSuites(response.data);
+            });
         } catch (err) {
             console.error(err);
         }
     };
 
-    const fetchTest = async () => {
+    const fetchTest = () => {
         try {
-            const response = await axios.get('http://localhost:7060/api/TestCase');
-            setAllTasks(response.data);
+            axios.get('http://localhost:7060/api/TestCase').then((response) => {
+                setAllTasks(response.data);
+            });
         } catch (err) {
             console.error(err);
         }
     };
 
-    const runTest = async (task: any) => {
+    const runTest = (task: any) => {
         try {
             const reqBody = { "testCase": task.testCaseId };
-            const response = await axios.post('http://localhost:7060/api/testcase/execute', reqBody, {
+            axios.post('http://localhost:7060/api/testcase/execute', reqBody, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
+            }).then((response) => {
+                if (response.status === 200) {
+                    showMessage(`${task.testCaseName} runned Successfully`);
+                }
             });
-            if (response.status === 200) {
-                showMessage(`${task.testCaseName} runned Successfully`);
-            }
         } catch (err) {
             console.log(err);
         }
