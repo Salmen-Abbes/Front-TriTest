@@ -1,21 +1,168 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { setPageTitle } from '../../../store/themeConfigSlice';
-import IconSend from '../../../components/Icon/IconSend';
-import IconPrinter from '../../../components/Icon/IconPrinter';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '../../../store';
+import ReactApexChart from 'react-apexcharts';
 import IconDownload from '../../../components/Icon/IconDownload';
+import CodeHighlight from '../../../components/Highlight';
 import IconEdit from '../../../components/Icon/IconEdit';
-import IconPlus from '../../../components/Icon/IconPlus';
+import IconSend from '../../../components/Icon/IconSend';
+import { setPageTitle } from '../../../store/themeConfigSlice';
 
 const Preview = () => {
+    const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
+    const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
+    const videoId = 'w7aVy00oLEs';
+    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    const donutChart: any = {
+        series: [44, 55, 13],
+        options: {
+            chart: {
+                height: 300,
+                type: 'donut',
+                zoom: {
+                    enabled: false,
+                },
+                toolbar: {
+                    show: false,
+                },
+            },
+            stroke: {
+                show: false,
+            },
+            labels: ['Team A', 'Team B', 'Team C'],
+            colors: ['#4361ee', '#805dca', '#e2a03f'],
+            responsive: [
+                {
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200,
+                        },
+                    },
+                },
+            ],
+            legend: {
+                position: 'bottom',
+            },
+        },
+    };
+    const radialBarChart: any = {
+        series: [44, 55, 41],
+        options: {
+            chart: {
+                height: 300,
+                type: 'radialBar',
+                zoom: {
+                    enabled: false,
+                },
+                toolbar: {
+                    show: false,
+                },
+            },
+            colors: ['#4361ee', '#805dca', '#e2a03f'],
+            grid: {
+                borderColor: isDark ? '#191e3a' : '#e0e6ed',
+            },
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            fontSize: '22px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            formatter: function (w: any) {
+                                // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                                return 249;
+                            },
+                        },
+                    },
+                },
+            },
+            labels: ['Apples', 'Oranges', 'Bananas'],
+            fill: {
+                opacity: 0.85,
+            },
+        },
+    };
+    const columnChart: any = {
+        series: [
+            {
+                name: 'Net Profit',
+                data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
+            },
+            {
+                name: 'Revenue',
+                data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
+            },
+        ],
+        options: {
+            chart: {
+                height: 300,
+                type: 'bar',
+                zoom: {
+                    enabled: false,
+                },
+                toolbar: {
+                    show: false,
+                },
+            },
+            colors: ['#805dca', '#e7515a'],
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent'],
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded',
+                },
+            },
+            grid: {
+                borderColor: isDark ? '#191e3a' : '#e0e6ed',
+                xaxis: {
+                    lines: {
+                        show: false,
+                    },
+                },
+            },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                axisBorder: {
+                    color: isDark ? '#191e3a' : '#e0e6ed',
+                },
+            },
+            yaxis: {
+                opposite: isRtl ? true : false,
+                labels: {
+                    offsetX: isRtl ? -10 : 0,
+                },
+            },
+            tooltip: {
+                theme: isDark ? 'dark' : 'light',
+                y: {
+                    formatter: function (val: any) {
+                        return val;
+                    },
+                },
+            },
+        },
+    };
+    const [view, setView] = useState(true)
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setPageTitle('Invoice Preview'));
+        dispatch(setPageTitle('Testcase Preview'));
     });
-    const exportTable = () => {
-        window.print();
-    };
 
     const items = [
         {
@@ -75,155 +222,115 @@ const Preview = () => {
 
     return (
         <div>
-            <div className="flex items-center lg:justify-end justify-center flex-wrap gap-4 mb-6">
-                <button type="button" className="btn btn-info gap-2">
-                    <IconSend />
-                    Send Invoice
+            <div className="flex items-center lg:justify-start justify-center flex-wrap gap-4 mb-6">
+                <button className='btn btn-secondary gap-2' onClick={() => setView(true)}>
+                    Video & Reports
                 </button>
-
-                <button type="button" className="btn btn-primary gap-2" onClick={() => exportTable()}>
-                    <IconPrinter />
-                    Print
+                <button className='btn btn-secondary gap-2' onClick={() => setView(false)}>
+                    Code & Clicks
                 </button>
-
-                <button type="button" className="btn btn-success gap-2">
-                    <IconDownload />
-                    Download
-                </button>
-
-                <Link to="/apps/invoice/add" className="btn btn-secondary gap-2">
-                    <IconPlus />
-                    Create
-                </Link>
-
-                <Link to="/apps/invoice/edit" className="btn btn-warning gap-2">
-                    <IconEdit />
-                    Edit
-                </Link>
             </div>
-            <div className="panel">
-                <div className="flex justify-between flex-wrap gap-4 px-4">
-                    <div className="text-2xl font-semibold uppercase">Invoice</div>
-                    <div className="shrink-0">
-                        <img src="/assets/images/logo.svg" alt="img" className="w-14 ltr:ml-auto rtl:mr-auto" />
-                    </div>
-                </div>
-                <div className="ltr:text-right rtl:text-left px-4">
-                    <div className="space-y-1 mt-6 text-white-dark">
-                        <div>13 Tetrick Road, Cypress Gardens, Florida, 33884, US</div>
-                        <div>vristo@gmail.com</div>
-                        <div>+1 (070) 123-4567</div>
-                    </div>
-                </div>
+            {view ? (
+                <div>
+                    <div className="panel flex items-center  justify-center flex-wrap gap-4 mb-6">
 
-                <hr className="border-white-light dark:border-[#1b2e4b] my-6" />
-                <div className="flex justify-between lg:flex-row flex-col gap-6 flex-wrap">
-                    <div className="flex-1">
-                        <div className="space-y-1 text-white-dark">
-                            <div>Issue For:</div>
-                            <div className="text-black dark:text-white font-semibold">John Doe</div>
-                            <div>405 Mulberry Rd. Mc Grady, NC, 28649</div>
-                            <div>redq@company.com</div>
-                            <div>(128) 666 070</div>
+                        <div className="mb-5">
+                            <ReactApexChart series={donutChart.series} options={donutChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="donut" height={300} />
+                        </div>
+                        <div className="mb-5">
+                            <ReactApexChart series={radialBarChart.series} options={radialBarChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="radialBar" height={300} />
                         </div>
                     </div>
-                    <div className="flex justify-between sm:flex-row flex-col gap-6 lg:w-2/3">
-                        <div className="xl:1/3 lg:w-2/5 sm:w-1/2">
-                            <div className="flex items-center w-full justify-between mb-2">
-                                <div className="text-white-dark">Invoice :</div>
-                                <div>#8701</div>
-                            </div>
-                            <div className="flex items-center w-full justify-between mb-2">
-                                <div className="text-white-dark">Issue Date :</div>
-                                <div>13 Sep 2022</div>
-                            </div>
-                            <div className="flex items-center w-full justify-between mb-2">
-                                <div className="text-white-dark">Order ID :</div>
-                                <div>#OD-85794</div>
-                            </div>
-                            <div className="flex items-center w-full justify-between">
-                                <div className="text-white-dark">Shipment ID :</div>
-                                <div>#SHP-8594</div>
-                            </div>
-                        </div>
-                        <div className="xl:1/3 lg:w-2/5 sm:w-1/2">
-                            <div className="flex items-center w-full justify-between mb-2">
-                                <div className="text-white-dark">Bank Name:</div>
-                                <div className="whitespace-nowrap">Bank Of America</div>
-                            </div>
-                            <div className="flex items-center w-full justify-between mb-2">
-                                <div className="text-white-dark">Account Number:</div>
-                                <div>1234567890</div>
-                            </div>
-                            <div className="flex items-center w-full justify-between mb-2">
-                                <div className="text-white-dark">SWIFT Code:</div>
-                                <div>S58K796</div>
-                            </div>
-                            <div className="flex items-center w-full justify-between mb-2">
-                                <div className="text-white-dark">IBAN:</div>
-                                <div>L5698445485</div>
-                            </div>
-                            <div className="flex items-center w-full justify-between mb-2">
-                                <div className="text-white-dark">Country:</div>
-                                <div>United States</div>
-                            </div>
-                        </div>
+                    <div className="panel mb-5">
+                        <ReactApexChart series={columnChart.series} options={columnChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="bar" height={300} />
                     </div>
-                </div>
-                <div className="table-responsive mt-6">
-                    <table className="table-striped">
-                        <thead>
-                            <tr>
-                                {columns.map((column) => {
-                                    return (
-                                        <th key={column.key} className={column?.class}>
-                                            {column.label}
-                                        </th>
-                                    );
-                                })}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {items.map((item) => {
-                                return (
-                                    <tr key={item.id}>
-                                        <td>{item.id}</td>
-                                        <td>{item.title}</td>
-                                        <td>{item.quantity}</td>
-                                        <td className="ltr:text-right rtl:text-left">${item.price}</td>
-                                        <td className="ltr:text-right rtl:text-left">${item.amount}</td>
+                    <div className="panel mb-5">
+                        <iframe
+                            width="1110"
+                            height="315"
+                            src={embedUrl}
+                            title="YouTube video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
+                </div>) :
+
+                (<div>
+                    <div className="flex items-center lg:justify-start justify-center flex-wrap gap-4 mb-6">
+                        <button type="button" className="btn btn-info gap-2">
+                            <IconSend />
+                            Run Test Case
+                        </button>
+
+                        <button type="button" className="btn btn-success gap-2">
+                            <IconDownload />
+                            Download Code
+                        </button>
+
+                        <Link to="/apps/invoice/edit" className="btn btn-warning gap-2">
+                            <IconEdit />
+                            Edit
+                        </Link>
+                    </div>
+                    <div className="panel">
+                        <div className="flex justify-between flex-wrap gap-4 px-4">
+                            <div className="text-2xl font-semibold uppercase">Testcase </div>
+                            <div className="shrink-0">
+                                <img src="/assets/images/logo.svg" alt="img" className="w-14 ltr:ml-auto rtl:mr-auto" />
+                            </div>
+                        </div>
+                        <hr className="border-white-light dark:border-[#1b2e4b] my-6" />
+                        <div className="text-black dark:text-white font-semibold">Testcase Code</div>
+                        <br />
+                        <CodeHighlight>
+                            <pre className="language-xml">
+                                {`<div className="mb-5 flex items-center justify-center">
+    <div className="max-w-[19rem] w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none">
+        <div className="py-7 px-6">
+            <div className="bg-[#3b3f5c] mb-5 inline-block p-3 text-[#f1f2f3] rounded-full">
+                <svg>...</svg>
+            </div>
+            <h5 className="text-[#3b3f5c] text-xl font-semibold mb-4 dark:text-white-light">Simple</h5>
+            <p className="text-white-dark">Mauris nisi felis, placerat in volutpat id, varius et sapien.</p>
+        </div>
+    </div>
+</div>`}
+                            </pre>
+                        </CodeHighlight>
+                        <hr className="border-white-light dark:border-[#1b2e4b] my-6" />
+                        <div className="text-black dark:text-white font-semibold">Testcase clicks</div>
+                        <div className="table-responsive mt-6">
+                            <table className="table-striped">
+                                <thead>
+                                    <tr>
+                                        {columns.map((column) => {
+                                            return (
+                                                <th key={column.key} className={column?.class}>
+                                                    {column.label}
+                                                </th>
+                                            );
+                                        })}
                                     </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-                <div className="grid sm:grid-cols-2 grid-cols-1 px-4 mt-6">
-                    <div></div>
-                    <div className="ltr:text-right rtl:text-left space-y-2">
-                        <div className="flex items-center">
-                            <div className="flex-1">Subtotal</div>
-                            <div className="w-[37%]">$3255</div>
+                                </thead>
+                                <tbody>
+                                    {items.map((item) => {
+                                        return (
+                                            <tr key={item.id}>
+                                                <td>{item.id}</td>
+                                                <td>{item.title}</td>
+                                                <td>{item.quantity}</td>
+                                                <td className="ltr:text-right rtl:text-left">${item.price}</td>
+                                                <td className="ltr:text-right rtl:text-left">${item.amount}</td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
                         </div>
-                        <div className="flex items-center">
-                            <div className="flex-1">Tax</div>
-                            <div className="w-[37%]">$700</div>
-                        </div>
-                        <div className="flex items-center">
-                            <div className="flex-1">Shipping Rate</div>
-                            <div className="w-[37%]">$0</div>
-                        </div>
-                        <div className="flex items-center">
-                            <div className="flex-1">Discount</div>
-                            <div className="w-[37%]">$10</div>
-                        </div>
-                        <div className="flex items-center font-semibold text-lg">
-                            <div className="flex-1">Grand Total</div>
-                            <div className="w-[37%]">$3945</div>
-                        </div>
+
                     </div>
-                </div>
-            </div>
+                </div>)}
         </div>
     );
 };

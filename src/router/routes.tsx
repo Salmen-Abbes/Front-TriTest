@@ -160,7 +160,8 @@ const routes = [
     },
     // preview page
     {
-        path: '/apps/invoice/preview',
+        //this
+        path: '/testcase/:id',
         element: <Preview />,
     },
     {
@@ -304,7 +305,7 @@ const routes = [
     },
 
     // charts page
-    {
+    {   //this + video
         path: '/charts',
         element: <Charts />,
     },

@@ -1353,7 +1353,7 @@ const pieChart: any = {
                         </CodeHighlight>
                     )}
                 </div>
-
+                
                 <div className="panel">
                     <div className="mb-5 flex items-center justify-between">
                         <h5 className="text-lg font-semibold dark:text-white">Basic Donut</h5>

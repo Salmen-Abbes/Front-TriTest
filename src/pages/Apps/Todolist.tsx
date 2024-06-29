@@ -1,26 +1,27 @@
-import { useState, useEffect, Fragment } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import Swal from 'sweetalert2';
 import { Dialog, Transition } from '@headlessui/react';
-import ReactQuill from 'react-quill';
+import axios from 'axios';
+import { Fragment, useEffect, useState } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-quill/dist/quill.snow.css';
-import Dropdown from '../../components/Dropdown';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../store';
-import { setPageTitle } from '../../store/themeConfigSlice';
+import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
+import Dropdown from '../../components/Dropdown';
+import IconCaretDown from '../../components/Icon/IconCaretDown';
 import IconClipboardText from '../../components/Icon/IconClipboardText';
+import IconHorizontalDots from '../../components/Icon/IconHorizontalDots';
 import IconListCheck from '../../components/Icon/IconListCheck';
-import IconStar from '../../components/Icon/IconStar';
-import IconTrashLines from '../../components/Icon/IconTrashLines';
-import IconSquareRotated from '../../components/Icon/IconSquareRotated';
+import IconMenu from '../../components/Icon/IconMenu';
+import IconPencilPaper from '../../components/Icon/IconPencilPaper';
 import IconPlus from '../../components/Icon/IconPlus';
 import IconSearch from '../../components/Icon/IconSearch';
-import IconMenu from '../../components/Icon/IconMenu';
-import IconCaretDown from '../../components/Icon/IconCaretDown';
-import IconHorizontalDots from '../../components/Icon/IconHorizontalDots';
-import IconPencilPaper from '../../components/Icon/IconPencilPaper';
+import IconSquareRotated from '../../components/Icon/IconSquareRotated';
+import IconStar from '../../components/Icon/IconStar';
+import IconTrashLines from '../../components/Icon/IconTrashLines';
 import IconX from '../../components/Icon/IconX';
-import axios from 'axios'
+import { IRootState } from '../../store';
+import { setPageTitle } from '../../store/themeConfigSlice';
 const Todolist = () => {
     const dispatch = useDispatch();
     useEffect(() => {
@@ -417,6 +418,7 @@ const Todolist = () => {
                                                                 {task.testCaseDescription}
                                                             </div>
                                                         </div>
+
                                                     </td>
                                                     <td className="w-1">
                                                         <div className="flex items-center ltr:justify-end rtl:justify-start space-x-2 rtl:space-x-reverse">
@@ -462,10 +464,10 @@ const Todolist = () => {
                                                                                     </button>
                                                                                 </li>
                                                                                 <li>
-                                                                                    <button type="button" onClick={() => setImportant(task)}>
+                                                                                    <Link to={`/testcase/${task.testCaseId}`} >
                                                                                         <IconListCheck className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0" />
                                                                                         Consult
-                                                                                    </button>
+                                                                                    </Link>
                                                                                 </li>
                                                                             </>
                                                                         )}
