@@ -189,11 +189,7 @@ const Todolist = () => {
         searchTasks(false);
     };
 
-    const setImportant = (task: any = null) => {
-        let item = filteredTasks.find((d: any) => d.id === task.testCaseId);
-        item.status = item.status === 'important' ? '' : 'important';
-        searchTasks(false);
-    };
+
 
     const viewTask = (item: any = null) => {
         setSelectedTask(item);
@@ -222,18 +218,20 @@ const Todolist = () => {
         if (params.testCaseId) {
             //update task
             try {
-                const response = await axios.put(`http://localhost:7060/api/testcase/${params.testCaseId}`, params)
-                if (response.status === 200) {
-                    setAllTasks(
-                        //@ts-ignore
-                        allTasks.map((d: any) => {
-                            if (d.testCaseId === params.testCaseId) {
-                                d = params;
-                            }
-                            return d;
-                        })
-                    );
-                }
+                axios.put(`http://localhost:7060/api/testcase/${params.testCaseId}`, params).then((response)=>{
+                    if (response.status === 200) {
+                        setAllTasks(
+                            //@ts-ignore
+                            allTasks.map((d: any) => {
+                                if (d.testCaseId === params.testCaseId) {
+                                    d = params;
+                                }
+                                return d;
+                            })
+                        );
+                    }
+                })
+                
             } catch (err: any) {
                 console.error(err)
             }
@@ -488,7 +486,7 @@ const Todolist = () => {
                         )}
                     </div>
                 </div>
-
+                {/* Edit + Create Modal */}
                 <Transition appear show={addTaskModal} as={Fragment}>
                     <Dialog as="div" open={addTaskModal} onClose={() => setAddTaskModal(false)} className="relative z-[51]">
                         <Transition.Child
@@ -588,7 +586,7 @@ const Todolist = () => {
                         </div>
                     </Dialog>
                 </Transition>
-
+                {/* Description Modal */}
                 <Transition appear show={viewTaskModal} as={Fragment}>
                     <Dialog as="div" open={viewTaskModal} onClose={() => setViewTaskModal(false)} className="relative z-[51]">
                         <Transition.Child
@@ -624,28 +622,8 @@ const Todolist = () => {
                                         </button>
                                         <div className="flex items-center flex-wrap gap-2 text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
                                             <div>{selectedTask.testCaseName}</div>
-                                            {selectedTask.priority && (
-                                                <div
-                                                    className={`badge rounded-3xl capitalize ${selectedTask.priority === 'medium'
-                                                        ? 'badge-outline-primary'
-                                                        : selectedTask.priority === 'low'
-                                                            ? 'badge-outline-warning '
-                                                            : selectedTask.priority === 'high'
-                                                                ? 'badge-outline-danger '
-                                                                : ''
-                                                        }`}
-                                                >
-                                                    {selectedTask.priority}
-                                                </div>
-                                            )}
-                                            {selectedTask.tag && (
-                                                <div
-                                                    className={`badge rounded-3xl capitalize ${selectedTask.tag === 'team' ? 'badge-outline-success' : selectedTask.tag === 'update' ? 'badge-outline-info ' : ''
-                                                        }`}
-                                                >
-                                                    {selectedTask.tag}
-                                                </div>
-                                            )}
+
+
                                         </div>
                                         <div className="p-5">
                                             <div className="text-base prose" dangerouslySetInnerHTML={{ __html: selectedTask.testCaseDescription }}></div>
