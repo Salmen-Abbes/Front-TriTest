@@ -36,6 +36,8 @@ const Todolist = () => {
         path: '',
         url: '',
         userId: null,
+        testCaseUpdatedDate:'',
+        testCaseCreatedDate:'',
         priority: 'low',
     };
 
@@ -622,11 +624,15 @@ const Todolist = () => {
                                         </button>
                                         <div className="flex items-center flex-wrap gap-2 text-lg font-medium bg-[#fbfbfb] dark:bg-[#121c2c] ltr:pl-5 rtl:pr-5 py-3 ltr:pr-[50px] rtl:pl-[50px]">
                                             <div>{selectedTask.testCaseName}</div>
-
+                                                        
 
                                         </div>
                                         <div className="p-5">
-                                            <div className="text-base prose" dangerouslySetInnerHTML={{ __html: selectedTask.testCaseDescription }}></div>
+                                            <div>Description: {selectedTask.testCaseDescription}</div>
+                                            <div>Navigator: {selectedTask.navigator}</div>
+                                            <div>URL: {selectedTask.url}</div>
+                                            <div>Creation Date: {selectedTask.testCaseCreatedDate}</div>
+                                            <div>Update Date: {selectedTask.testCaseUpdatedDate}</div>
                                             <div className="flex justify-end items-center mt-8">
                                                 <button type="button" className="btn btn-outline-danger" onClick={() => setViewTaskModal(false)}>
                                                     Close
