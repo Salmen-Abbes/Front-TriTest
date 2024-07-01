@@ -29,6 +29,7 @@ const Todolist = () => {
     });
     const defaultParams = {
         testCaseId: null,
+        versionTest:0,
         testCaseName: '',
         testCaseDescription: '',
         descriptionText: '',
@@ -629,6 +630,7 @@ const Todolist = () => {
                                         </div>
                                         <div className="p-5">
                                             <div>Description: {selectedTask.testCaseDescription}</div>
+                                            <div>Test Version: {selectedTask.versionTest? 'Clicks':'Video'}</div>
                                             <div>Navigator: {selectedTask.navigator}</div>
                                             <div>URL: {selectedTask.url}</div>
                                             <div>Creation Date: {selectedTask.testCaseCreatedDate}</div>

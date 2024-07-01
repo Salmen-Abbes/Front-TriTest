@@ -25,11 +25,21 @@ const Preview = () => {
             console.error(err);
         }
     };
+    const fetchData = ()=>{
+        axios.get(`http://localhost:7060/api/testcasedata/${id}`).then((response:any)=>{
+            if(response.status===200){
+                setItems(response.data.jsonFileContent.map((record:any,index:number)=>({id:index+1,...record})))
+                setCode(response.data.specFlowFileContent)
+            }
+        }).catch((err)=>{
+            console.error(err)
+        })
+    }
     const fetchTestCase  = (id:any)=>{
         axios.get(`http://localhost:7060/api/testcase/${id}`).then((response:any)=>{
             if(response.status===200){
                 setParams(response.data)
-                console.log(response.data);
+                setView(response.data.versionTest)
             }
         }).catch((error)=>{
             console.error(error);
@@ -49,7 +59,7 @@ const Preview = () => {
                 }
             });
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     };
     useEffect(() => {
@@ -274,16 +284,7 @@ const Preview = () => {
         dispatch(setPageTitle('Testcase Preview'));
     });
     //function to fetch data (json and code)
-    const fetchData = ()=>{
-        axios.get('http://localhost:7060/api/testcasedata').then((response:any)=>{
-            if(response.status===200){
-                setItems(response.data.jsonFileContent.map((record:any,index:number)=>({id:index+1,...record})))
-                setCode(response.data.specFlowFileContent)
-            }
-        }).catch((err)=>{
-            console.log(err)
-        })
-    }
+    
     const [items,setItems] =useState<any>([]);
 
     const columns = [
@@ -308,14 +309,6 @@ const Preview = () => {
 
     return (
         <div>
-            <div className="flex items-center lg:justify-start justify-center flex-wrap gap-4 mb-6">
-                <button className='btn btn-secondary gap-2' onClick={() => setView(true)}>
-                    Video & Reports
-                </button>
-                <button className='btn btn-secondary gap-2' onClick={() => setView(false)}>
-                    Code & Clicks
-                </button>
-            </div>
             {view ? (
                 <div>
                     <div className="text-black dark:text-white font-semibold">Chart 1 </div>
