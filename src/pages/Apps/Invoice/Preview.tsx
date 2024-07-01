@@ -120,7 +120,7 @@ const Preview = () => {
     </div>`)
     const handleDownload = () => {
         const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
-        saveAs(blob, `code.txt`);
+        saveAs(blob, `TestCase_${testCaseId}_code.cs`);
     };
     const embedUrl = `https://www.youtube.com/embed/${videoId}`;
     const donutChart: any = {

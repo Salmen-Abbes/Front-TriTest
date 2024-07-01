@@ -24,7 +24,7 @@ const Notes = () => {
     const [notesList, setNoteList] = useState([
     ]);
 
-    const defaultParams = { scenarioId: null, testCaseId: '', commande: '', path: '', value: '', url: '' };
+    const defaultParams = { idTypeValue:'', tagValue:'', scenarioId: null, testCaseId: '', commande: '', path: '', value: '', url: '' };
     const [params, setParams] = useState<any>(JSON.parse(JSON.stringify(defaultParams)));
     const [addContactModal, setAddContactModal] = useState<any>(false);
     const [isDeleteNoteModal, setIsDeleteNoteModal] = useState<any>(false);
@@ -34,6 +34,7 @@ const Notes = () => {
     const [selectedTab, setSelectedTab] = useState<any>('');
     const [deletedNote, setDeletedNote] = useState<any>(null);
     const [testCases, setTestCases] = useState<any>(null)
+
 
     const fetchTest = () => {
         axios.get('http://localhost:7060/api/testcase')
@@ -130,9 +131,15 @@ const Notes = () => {
         setIsDeleteNoteModal(true);
     };
 
-
-    const editNote = (note: any = null) => {
+    const handleEditNote = (note:any = null)=>{
         setIsShowNoteMenu(false);
+        if (note){
+            setParams(note);
+        }
+        setAddContactModal(true);
+    }
+    const editNote = (note: any = null) => {
+        
 
         const json = JSON.parse(JSON.stringify(defaultParams));
         setParams(json);
@@ -273,7 +280,7 @@ const Notes = () => {
                                                         >
                                                             <ul className="text-sm font-medium">
                                                                 <li>
-                                                                    <button type="button" onClick={() => editNote(note)}>
+                                                                    <button type="button" onClick={() => handleEditNote(note)}>
                                                                         <IconPencil className="w-4 h-4 ltr:mr-3 rtl:ml-3 shrink-0" />
                                                                         Edit
                                                                     </button>
@@ -356,16 +363,31 @@ const Notes = () => {
                                                         <input id="commande" type="text" placeholder="Enter Commande" className="form-input" value={params.commande} onChange={(e) => changeValue(e)} />
                                                     </div>
                                                     <div className="mb-5">
-                                                        <label htmlFor="path">Path</label>
-                                                        <input id="path" type="text" placeholder="Enter Path" className="form-input" value={params.path} onChange={(e) => changeValue(e)} />
-                                                    </div>
-                                                    <div className="mb-5">
                                                         <label htmlFor="value">Value</label>
                                                         <input id="value" type="text" placeholder="Enter Value" className="form-input" value={params.value} onChange={(e) => changeValue(e)} />
                                                     </div>
                                                     <div className="mb-5">
-                                                        <label htmlFor="url">URL</label>
-                                                        <input id="url" type="text" placeholder="Enter URL" className="form-input" value={params.url} onChange={(e) => changeValue(e)} />
+                                                        <label htmlFor="path">Path</label>
+                                                        <input id="path" type="text" placeholder="Enter Path" className="form-input" value={params.path} onChange={(e) => changeValue(e)} />
+                                                    </div>
+
+                                                    <div className="mb-5">
+                                                        <label htmlFor="tagValue">Tag Value</label>
+                                                        <input id="tagValue" type="text" placeholder="Enter Tag Value" className="form-input" value={params.tagValue} onChange={(e) => changeValue(e)} />
+                                                    </div>
+                                                    <div className="mb-5">
+                                                        <label htmlFor="testCaseId">Type Value</label>
+                                                        <select id="idTypeValue" className="form-select" value={params.idTypeValue} onChange={(e) => changeValue(e)}>
+                                                            <option value="">Select Type Value</option>
+                                                            <option value="1">Id</option>
+                                                            <option value="2">Name</option>
+                                                            <option value="3">ClassName</option>
+                                                            <option value="4">CssSelector</option>
+                                                            <option value="5">XPath</option>
+                                                            <option value="6">TagName</option>
+                                                            <option value="7">PartialLinkText</option>
+                                                            <option value="8">LinkTexy</option>
+                                                        </select>
                                                     </div>
                                                     <div className="flex justify-end items-center mt-8">
                                                         <button type="button" className="btn btn-outline-danger gap-2" onClick={() => setAddContactModal(false)}>
