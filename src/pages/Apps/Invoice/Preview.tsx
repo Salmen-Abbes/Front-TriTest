@@ -57,6 +57,7 @@ const Preview = () => {
             setTestCaseId(id);
             fetchTestCase(id);
             fetchSuites();
+            fetchData();
         }
     }, [id]);
     const defaultParams = {
@@ -272,59 +273,35 @@ const Preview = () => {
     useEffect(() => {
         dispatch(setPageTitle('Testcase Preview'));
     });
-
-    const items = [
-        {
-            id: 1,
-            title: 'Calendar App Customization',
-            quantity: 1,
-            price: '120',
-            amount: '120',
-        },
-        {
-            id: 2,
-            title: 'Chat App Customization',
-            quantity: 1,
-            price: '230',
-            amount: '230',
-        },
-        {
-            id: 3,
-            title: 'Laravel Integration',
-            quantity: 1,
-            price: '405',
-            amount: '405',
-        },
-        {
-            id: 4,
-            title: 'Backend UI Design',
-            quantity: 1,
-            price: '2500',
-            amount: '2500',
-        },
-    ];
+    //function to fetch data (json and code)
+    const fetchData = ()=>{
+        axios.get('http://localhost:7060/api/testcasedata').then((response:any)=>{
+            if(response.status===200){
+                setItems(response.data.json.map((record:any,index:number)=>({id:index+1,...record})))
+                setCode(response.data.code)
+            }
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
+    const [items,setItems] =useState<any>([]);
 
     const columns = [
         {
             key: 'id',
-            label: 'S.NO',
+            label: 'N°',
         },
         {
-            key: 'title',
-            label: 'ITEMS',
+            key: 'Timestamp',
+            label: 'Timestamp',
         },
         {
-            key: 'quantity',
-            label: 'QTY',
+            key: 'ActionDescription',
+            label: 'Description',
         },
         {
-            key: 'price',
-            label: 'PRICE',
-            class: 'ltr:text-right rtl:text-left',
-        },
-        {
-            key: 'amount',
-            label: 'AMOUNT',
+            key: 'XPath',
+            label: 'XPath',
             class: 'ltr:text-right rtl:text-left',
         },
     ];
@@ -402,7 +379,7 @@ const Preview = () => {
                         <div className="text-black dark:text-white font-semibold">Testcase Code</div>
                         <br />
                         <CodeHighlight>
-                            <pre className="language-xml">
+                            <pre className="language-xml" style={{maxHeight:'300px',overflowY:'auto'}}>
                                {code}
                             </pre>
                         </CodeHighlight>
@@ -422,14 +399,13 @@ const Preview = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {items.map((item) => {
+                                    {items.map((item:any) => {
                                         return (
                                             <tr key={item.id}>
                                                 <td>{item.id}</td>
-                                                <td>{item.title}</td>
-                                                <td>{item.quantity}</td>
-                                                <td className="ltr:text-right rtl:text-left">${item.price}</td>
-                                                <td className="ltr:text-right rtl:text-left">${item.amount}</td>
+                                                <td>{item.Timestamp}</td>
+                                                <td>{item.ActionDescription}</td>
+                                                <td className="ltr:text-right rtl:text-left">${item.XPath}</td>
                                             </tr>
                                         );
                                     })}

@@ -267,8 +267,8 @@ const Notes = () => {
                                                     <div className="flex items-center w-max">
 
                                                         <div className="ltr:ml-2 rtl:mr-2">
-                                                            <div className="font-semibold">{note.commande}</div>
-                                                            <div className="text-sx text-white-dark">{note.path}</div>
+                                                            <div className="font-semibold">Scenario {note.scenarioId}</div>
+                                                            <div className="text-sx text-white-dark">Commande: {note.commande}</div>
                                                         </div>
                                                     </div>
                                                     <div className="dropdown">
@@ -297,11 +297,13 @@ const Notes = () => {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <p className="text-white-dark mt-2">{note.value}</p>
+                                                    <p className="text-white-dark mt-2">Path: {note.path}</p>
+                                                    <p className="text-white-dark mt-2">Value: {note.value}</p>
+                                                    <p className="text-white-dark mt-2">Tag Value: {note.tagValue}</p>
+                                                    <p className="text-white-dark mt-2">Type Value ID: {note.idTypeValue}</p>
+                                                    <p className="text-white-dark mt-2">Test Case ID: {note.testCaseId}</p>
                                                 </div>
-                                                <div>
-                                                    <p className="text-white-dark mt-2">{note.url}</p>
-                                                </div>
+                                                
                                             </div>
 
                                         </div>
@@ -376,7 +378,7 @@ const Notes = () => {
                                                         <input id="tagValue" type="text" placeholder="Enter Tag Value" className="form-input" value={params.tagValue} onChange={(e) => changeValue(e)} />
                                                     </div>
                                                     <div className="mb-5">
-                                                        <label htmlFor="testCaseId">Type Value</label>
+                                                        <label htmlFor="idTypeValue">Type Value</label>
                                                         <select id="idTypeValue" className="form-select" value={params.idTypeValue} onChange={(e) => changeValue(e)}>
                                                             <option value="">Select Type Value</option>
                                                             <option value="1">Id</option>
