@@ -277,8 +277,8 @@ const Preview = () => {
     const fetchData = ()=>{
         axios.get('http://localhost:7060/api/testcasedata').then((response:any)=>{
             if(response.status===200){
-                setItems(response.data.json.map((record:any,index:number)=>({id:index+1,...record})))
-                setCode(response.data.code)
+                setItems(response.data.jsonFileContent.map((record:any,index:number)=>({id:index+1,...record})))
+                setCode(response.data.specFlowFileContent)
             }
         }).catch((err)=>{
             console.log(err)

@@ -1,8 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { useMantineTheme } from '@mantine/core';
 import axios from 'axios';
-import sortBy from 'lodash/sortBy';
-import { DataTable, DataTableSortStatus } from 'mantine-datatable';
+import { DataTable } from 'mantine-datatable';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import IconEdit from '../../../components/Icon/IconEdit';
@@ -12,7 +10,7 @@ import IconX from '../../../components/Icon/IconX';
 import { setPageTitle } from '../../../store/themeConfigSlice';
 
 const List = () => {
-    const theme = useMantineTheme();
+
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setPageTitle('Test Suites'));
@@ -20,13 +18,6 @@ const List = () => {
     }, [dispatch]);
 
     const [items, setItems] = useState([]);
-    const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
-        columnAccessor: 'testSuiteId',
-        direction: 'asc',
-    });
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [selectedRecords, setSelectedRecords] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalType, setModalType] = useState('');
     const [currentSuite, setCurrentSuite] = useState<any>({ testSuiteName: '', testSuiteDescription: '' });
