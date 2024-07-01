@@ -309,39 +309,7 @@ const Preview = () => {
 
     return (
         <div>
-            {view ? (
-                <div>
-                    <div className="text-black dark:text-white font-semibold">Chart 1 </div>
-                    <br />
-                    <div className="panel flex items-center  justify-center flex-wrap gap-4 mb-6">
-
-                        <div className="mb-5">
-                            <ReactApexChart series={donutChart.series} options={donutChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="donut" height={300} />
-                        </div>
-                        <div className="mb-5">
-                            <ReactApexChart series={radialBarChart.series} options={radialBarChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="radialBar" height={300} />
-                        </div>
-                    </div>
-                    <hr className="border-white-light dark:border-[#1b2e4b] my-6" />
-                    <div className="text-black dark:text-white font-semibold">Chart 2 </div>
-                    <br />
-                    <div className="panel mb-5">
-                        <ReactApexChart series={columnChart.series} options={columnChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="bar" height={300} />
-                    </div>
-                    <hr className="border-white-light dark:border-[#1b2e4b] my-6" />
-                    <div className="text-black dark:text-white font-semibold">Video of Testcase</div>
-                    <br />
-                    <div className="panel mb-5">
-                        <iframe
-                            width="1110"
-                            height="315"
-                            src={embedUrl}
-                            title="YouTube video player"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                        ></iframe>
-                    </div>
-                </div>) :
+            {view ? 
 
                 (<div>
                     <div className="flex items-center lg:justify-start justify-center flex-wrap gap-4 mb-6">
@@ -407,7 +375,39 @@ const Preview = () => {
                         </div>
 
                     </div>
-                </div>)}
+                </div>):(
+                <div>
+                    <div className="text-black dark:text-white font-semibold">Chart 1 </div>
+                    <br />
+                    <div className="panel flex items-center  justify-center flex-wrap gap-4 mb-6">
+
+                        <div className="mb-5">
+                            <ReactApexChart series={donutChart.series} options={donutChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="donut" height={300} />
+                        </div>
+                        <div className="mb-5">
+                            <ReactApexChart series={radialBarChart.series} options={radialBarChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="radialBar" height={300} />
+                        </div>
+                    </div>
+                    <hr className="border-white-light dark:border-[#1b2e4b] my-6" />
+                    <div className="text-black dark:text-white font-semibold">Chart 2 </div>
+                    <br />
+                    <div className="panel mb-5">
+                        <ReactApexChart series={columnChart.series} options={columnChart.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="bar" height={300} />
+                    </div>
+                    <hr className="border-white-light dark:border-[#1b2e4b] my-6" />
+                    <div className="text-black dark:text-white font-semibold">Video of Testcase</div>
+                    <br />
+                    <div className="panel mb-5">
+                        <iframe
+                            width="1110"
+                            height="315"
+                            src={embedUrl}
+                            title="YouTube video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
+                </div>) }
             <Transition appear show={addTaskModal} as={Fragment}>
                 <Dialog as="div" open={addTaskModal} onClose={() => setAddTaskModal(false)} className="relative z-[51]">
                     <Transition.Child
